@@ -3,27 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Skylight
 {
-	public enum ControlType
-	{
-		Move,
-		Jump,
-		Action,
-		Throw,
-		SoulControll,
-		SoulOut,
-		Pause,
-	}
 
-	public enum Mode
-	{
-		Deer,
-		Bear,
-		Player,
-	}
 
 	public class InputControl
 	{
-		Mode m_currentMode = Mode.Player;
+		/// <summary>
+		/// Control type.
+		/// 控制类型
+		/// The types of control keys are separated according to their roles, 
+		/// and are logically differentiated, such as attack, 
+		/// defense, determination, cancellation, and so on.
+		/// 控制键的类型根据作用的不同而分开，是逻辑上的区分，例如攻击、
+		/// 防御、确定、取消等。
+		/// </summary>
+		public enum ControlType
+		{
+			Move,
+			Jump,
+			Action,
+			Throw,
+			SoulControll,
+			SoulOut,
+			Pause,
+		}
+
+
 
 		ControlType [] m_controlType = {
 			ControlType.Move,
@@ -34,8 +38,8 @@ namespace Skylight
 			ControlType.SoulOut,
 			ControlType.Pause,
 		};
-		Dictionary<ControlType, Controller> m_controller =
-			new Dictionary<ControlType, Controller> ();
+		//Dictionary<ControlType, Controller> m_controller =
+		//new Dictionary<ControlType, Controller> ();
 
 		public ControlType [] m_playerController = {
 			ControlType.Move,
@@ -64,63 +68,63 @@ namespace Skylight
 			ControlType.Pause,
 		};
 
-		public Vector3 Move {
-			get {
+		//public Vector3 Move {
+		//	get {
 
-				Vector3 dir = Vector3.zero;
-				//移动端的优先级更高
-				HandheldVector3Input input = (HandheldVector3Input)m_controller [ControlType.Move].m_handheldInput;
-				if (input.Value != Vector3.zero) {
-					return input.Value;
-				} else {
+		//		Vector3 dir = Vector3.zero;
+		//		//移动端的优先级更高
+		//		HandheldVector3Input input = (HandheldVector3Input)m_controller [ControlType.Move].m_handheldInput;
+		//		if (input.Value != Vector3.zero) {
+		//			return input.Value;
+		//		} else {
 
-					return ((DesktopVector3Input)m_controller [ControlType.Move].m_desktopInput).Value;
-				}
+		//			return ((DesktopVector3Input)m_controller [ControlType.Move].m_desktopInput).Value;
+		//		}
 
-			}
-		}
+		//	}
+		//}
 
-		public bool Jump {
-			get {
-				return ((HandheldButtonInput)m_controller [ControlType.Jump].m_handheldInput).Value ||
-						((DesktopJumpInput)m_controller [ControlType.Jump].m_desktopInput).Value;
-			}
-		}
+		//public bool Jump {
+		//	get {
+		//		return ((HandheldButtonInput)m_controller [ControlType.Jump].m_handheldInput).Value ||
+		//				((DesktopJumpInput)m_controller [ControlType.Jump].m_desktopInput).Value;
+		//	}
+		//}
 
-		public bool Action {
-			get {
-				return ((HandheldButtonInput)m_controller [ControlType.Action].m_handheldInput).Value ||
-																							   ((DesktopActionInput)m_controller [ControlType.Action].m_desktopInput).Value;
-			}
-		}
+		//public bool Action {
+		//	get {
+		//		return ((HandheldButtonInput)m_controller [ControlType.Action].m_handheldInput).Value ||
+		//																					   ((DesktopActionInput)m_controller [ControlType.Action].m_desktopInput).Value;
+		//	}
+		//}
 
-		public bool Throw {
-			get {
-				return ((HandheldButtonInput)m_controller [ControlType.Throw].m_handheldInput).Value ||
-																							  ((DesktopThrowInput)m_controller [ControlType.Throw].m_desktopInput).Value;
-			}
-		}
+		//public bool Throw {
+		//	get {
+		//		return ((HandheldButtonInput)m_controller [ControlType.Throw].m_handheldInput).Value ||
+		//																					  ((DesktopThrowInput)m_controller [ControlType.Throw].m_desktopInput).Value;
+		//	}
+		//}
 
-		public bool SoulControl {
-			get {
-				return ((HandheldButtonInput)m_controller [ControlType.SoulControll].m_handheldInput).Value ||
-																									 ((DesktopSoulControlInput)m_controller [ControlType.SoulControll].m_desktopInput).Value;
-			}
-		}
+		//public bool SoulControl {
+		//	get {
+		//		return ((HandheldButtonInput)m_controller [ControlType.SoulControll].m_handheldInput).Value ||
+		//																							 ((DesktopSoulControlInput)m_controller [ControlType.SoulControll].m_desktopInput).Value;
+		//	}
+		//}
 
-		public bool SoulOut {
-			get {
-				return ((HandheldButtonInput)m_controller [ControlType.SoulOut].m_handheldInput).Value ||
-																								((DesktopSoulOutInput)m_controller [ControlType.SoulOut].m_desktopInput).Value;
-			}
-		}
+		//public bool SoulOut {
+		//	get {
+		//		return ((HandheldButtonInput)m_controller [ControlType.SoulOut].m_handheldInput).Value ||
+		//																						((DesktopSoulOutInput)m_controller [ControlType.SoulOut].m_desktopInput).Value;
+		//	}
+		//}
 
-		public bool Puase {
-			get {
-				return ((HandheldButtonInput)m_controller [ControlType.Pause].m_handheldInput).Value ||
-																							 ((DesktopPauseInput)m_controller [ControlType.Pause].m_desktopInput).Value;
-			}
-		}
+		//public bool Puase {
+		//	get {
+		//		return ((HandheldButtonInput)m_controller [ControlType.Pause].m_handheldInput).Value ||
+		//																					 ((DesktopPauseInput)m_controller [ControlType.Pause].m_desktopInput).Value;
+		//	}
+		//}
 
 		public void Init ()
 		{
@@ -184,117 +188,117 @@ namespace Skylight
 
 
 
-		public void Show ()
-		{
-			Show (m_currentMode);
-		}
-		public void Show (Mode mode)
-		{
-			switch (mode) {
-			case Mode.Bear:
-				m_currentMode = mode;
-				Show (m_bearController);
-				break;
+		//public void Show ()
+		//{
+		//	Show (m_currentMode);
+		//}
+		//public void Show (Mode mode)
+		//{
+		//	switch (mode) {
+		//	case Mode.Bear:
+		//		m_currentMode = mode;
+		//		Show (m_bearController);
+		//		break;
 
-			case Mode.Deer:
-				m_currentMode = mode;
-				Show (m_deerController);
-				break;
+		//	case Mode.Deer:
+		//		m_currentMode = mode;
+		//		Show (m_deerController);
+		//		break;
 
-			case Mode.Player:
-				m_currentMode = mode;
-				Show (m_playerController);
-				break;
-
-
-			}
-		}
-
-		public void Show (ControlType controlType)
-		{
-			m_controller [controlType].Show ();
-		}
-		public void Show (ControlType [] types)
-		{
-			CloseAll ();
-			foreach (ControlType type in types) {
-				m_controller [type].Show ();
-			}
-		}
-		public void Close ()
-		{
-			Close (m_currentMode);
-		}
-		public void ShowAll ()
-		{
-			foreach (Controller controller in m_controller.Values) {
-				controller.Show ();
-			}
-		}
+		//	case Mode.Player:
+		//		m_currentMode = mode;
+		//		Show (m_playerController);
+		//		break;
 
 
-		public void Close (Mode mode)
-		{
-			switch (mode) {
-			case Mode.Bear:
-				m_currentMode = mode;
-				Close (m_bearController);
-				break;
+		//	}
+		//}
 
-			case Mode.Deer:
-				m_currentMode = mode;
-				Close (m_deerController);
-				break;
+		//public void Show (ControlType controlType)
+		//{
+		//	m_controller [controlType].Show ();
+		//}
+		//public void Show (ControlType [] types)
+		//{
+		//	CloseAll ();
+		//	foreach (ControlType type in types) {
+		//		m_controller [type].Show ();
+		//	}
+		//}
+		//public void Close ()
+		//{
+		//	Close (m_currentMode);
+		//}
+		//public void ShowAll ()
+		//{
+		//	foreach (Controller controller in m_controller.Values) {
+		//		controller.Show ();
+		//	}
+		//}
 
-			case Mode.Player:
-				m_currentMode = mode;
-				Close (m_playerController);
-				break;
-			}
-		}
 
-		public void Close (ControlType controlType)
-		{
-			m_controller [controlType].Close ();
-		}
+		//public void Close (Mode mode)
+		//{
+		//	switch (mode) {
+		//	case Mode.Bear:
+		//		m_currentMode = mode;
+		//		Close (m_bearController);
+		//		break;
 
-		public void Close (ControlType [] types)
-		{
-			//ShowAll ();
-			foreach (ControlType type in types) {
-				m_controller [type].Close ();
+		//	case Mode.Deer:
+		//		m_currentMode = mode;
+		//		Close (m_deerController);
+		//		break;
 
-			}
+		//	case Mode.Player:
+		//		m_currentMode = mode;
+		//		Close (m_playerController);
+		//		break;
+		//	}
+		//}
 
-		}
+		//public void Close (ControlType controlType)
+		//{
+		//	m_controller [controlType].Close ();
+		//}
 
-		public void CloseAll ()
-		{
-			foreach (Controller controller in m_controller.Values) {
-				controller.Close ();
-			}
-		}
+		//public void Close (ControlType [] types)
+		//{
+		//	//ShowAll ();
+		//	foreach (ControlType type in types) {
+		//		m_controller [type].Close ();
+
+		//	}
+
+		//}
+
+		//public void CloseAll ()
+		//{
+		//	foreach (Controller controller in m_controller.Values) {
+		//		controller.Close ();
+		//	}
+		//}
 
 
 
 	}
 
-	public abstract class Controller
-	{
-		public ControlType m_controlType;
-		//protected int m_desktopInput;
-		//protected int m_handheldInput;
+	//public abstract class Controller
+	//{
+	//	public ControlType m_controlType;
+	//	//protected int m_desktopInput;
+	//	//protected int m_handheldInput;
 
-		public BaseInput m_desktopInput;
-		public BaseInput m_handheldInput;
+	//	public BaseInput m_desktopInput;
+	//	public BaseInput m_handheldInput;
 
 
-		abstract public void Init ();
+	//	abstract public void Init ();
 
-		abstract public void Show ();
+	//	abstract public void Show ();
 
-		abstract public void Close ();
-	}
+	//	abstract public void Close ();
+	//}
 	/*
 public class JumpController : Controller
 {

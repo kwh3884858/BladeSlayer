@@ -13,13 +13,24 @@ namespace Skylight
 
 	}
 
+	public enum Environment
+	{
+
+	}
+
 	/// <summary>
+	/// 输入服务
 	/// InputService
 	/// 输入服务通过暴露简单的接口隐藏不同设备之间的输入差异
 	/// Input services hide input differences between different devices by exposing simple interfaces
-	/// 同时输入服务能够通过简单的开关来决定是否开启特定设备的输入
-	/// At the same time, InputService can determine whether to 
-	/// open the input of a specific device through a simple switch
+	/// 
+	/// 在不同的场景中切换的时候，会遇到多个运行的场景调用同一个键位的情况。
+	/// 例如在即时战斗中，确定键是作为攻击键的，
+	/// 但是在剧情场景中，确定键作为对话键，
+	/// 为了能够切换这些场景，框架提供一个*输入环境的栈*
+	/// 每次新的环境压入时，都会只相应这个环境的输入请。
+	/// 例如，当在游戏中开启菜单时，确定键只会被菜单获取到。
+	/// 尽管游戏场景也在运行，但是不会获取到对应的操作。
 	/// </summary>
 	public class InputService : GameModule<InputService>
 	{
@@ -50,6 +61,12 @@ namespace Skylight
 			m_inputControl.Init ();
 		}
 
+		/// <summary>
+		/// Switchs the device input.(deprecated)
+		/// 切换输入类型。被弃用。不要使用它。
+		/// </summary>
+		/// <param name="deviceType">Device type.</param>
+		/// <param name="isOpen">If set to <c>true</c> is open.</param>
 		public void SwitchDeviceInput (DeviceType deviceType, bool isOpen)
 		{
 			switch (deviceType) {
@@ -61,28 +78,28 @@ namespace Skylight
 
 			case DeviceType.Handheld:
 				m_isHandheld = isOpen;
-				if (m_isHandheld) {
-					ShowUI ();
-				} else {
-					CloseUI ();
-				}
+				//if (m_isHandheld) {
+				//	ShowUI ();
+				//} else {
+				//	CloseUI ();
+				//}
 				break;
 			}
 		}
 
 
 
-		void ShowUI ()
-		{
-			m_inputControl.Show ();
+		//void ShowUI ()
+		//{
+		//	m_inputControl.Show ();
 
-		}
+		//}
 
-		void CloseUI ()
-		{
-			m_inputControl.Close ();
+		//void CloseUI ()
+		//{
+		//	m_inputControl.Close ();
 
-		}
+		//}
 	}
 
 }

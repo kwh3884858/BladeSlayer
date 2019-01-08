@@ -1,6 +1,7 @@
 # BladeSlayer
 
 #### 项目介绍
+一款赛博朋克风格的，具有独特渲染效果的动作角色扮演游戏。
 
 
 #### 玩法介绍
@@ -8,8 +9,8 @@
 
 #### 协作指令
 
-1. **克隆远程仓库** `git clone https://gitee.com/djybbb/IGG-Round3-Team4.git`
-2. **进入仓库** `cd IGG-Round3-Team4` 切换到仓库里
+1. **克隆远程仓库** `git clone https://github.com/kwh3884858/BladeSlayer`
+2. **进入仓库** `cd BladeSlayer` 切换到仓库里
 3. **查看分支** `git branch`  如果确定自己是在master就没问题。
 4. **更新仓库** `git pull` 
 5. **分支说明**， `master`是**主分支** ,`dev` 是**开发分支**。
