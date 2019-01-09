@@ -128,7 +128,7 @@ namespace Skylight
 
 		public void Init ()
 		{
-			int deviceCount = InputService.Instance ().m_openDeviceType.Length;
+			//int deviceCount = InputService.Instance ().m_openDeviceType.Length;
 			int i = 0;
 			foreach (ControlType type in m_controlType) {
 				switch (type) {

@@ -13,8 +13,17 @@ namespace Skylight
 
 	}
 
+	/// <summary>
+	/// Environment type for scene.
+	/// 每个场景都场景定一个操作环境
+	/// 例如：战斗场景和对话场景，使用的就是一套不同的操作环境。
+	/// UI也被归入到一个场景中，场景加载时，根据数据导入需要的UI模块。
+	/// </summary>
 	public enum Environment
 	{
+		UI,             //UI场景
+		Story,          //故事场景
+		Battle,         //战斗场景
 
 	}
 
@@ -31,17 +40,38 @@ namespace Skylight
 	/// 每次新的环境压入时，都会只相应这个环境的输入请。
 	/// 例如，当在游戏中开启菜单时，确定键只会被菜单获取到。
 	/// 尽管游戏场景也在运行，但是不会获取到对应的操作。
+	/// When switching between different environment, 
+	/// you will encounter multiple scenes that call the same key. 
+	/// For example, in an battle, 
+	/// the key is determined as an attack key, 
+	/// but in the scenario environment, the key is determined as a dialog key, 
+	/// and in order to be able to switch between these scenes, 
+	/// the framework provides a stack of *input environments*. 
+	/// Every time a new environment is pushed in, 
+	/// it will only be input for this environment. 
+	/// For example, when the menu is opened in the game, 
+	/// the comfirm button will only be retrieved by the menu. 
+	/// Although the game scene is also running, 
+	/// it will not get the corresponding operation.
+	/// 
 	/// </summary>
+	/// 
 	public class InputService : GameModule<InputService>
 	{
 
-		public DeviceType [] m_openDeviceType = { DeviceType.Desktop, DeviceType.Handheld };
+		//public DeviceType [] m_openDeviceType = { DeviceType.Desktop, DeviceType.Handheld };
 
-		InputControl m_inputControl;
+		private InputControl m_inputControl;
 
-		private bool m_isDesktop = false;
-		private bool m_isHandheld = false;
+		//private bool m_isDesktop = false;
+		//private bool m_isHandheld = false;
 
+		/// <summary>
+		/// The is environment stack.
+		/// 这是环境栈，所有的场景，UI在定义时候，都会有一个对应的环境栈
+		/// 注册之前，需要往其中压入对应的栈
+		/// </summary>
+		private Stack<Environment> m_environment = new Stack<Environment> ();
 
 
 		public InputControl Input {
@@ -50,6 +80,32 @@ namespace Skylight
 			}
 		}
 
+		public InputControl GetInput (Environment environment)
+		{
+			return m_inputControl;
+		}
+		/// <summary>
+		/// Pushing a the environment into stack，
+		/// you need to judge whether the top of stack is already the same type
+		/// If it is the same type, it is not pushed onto the stack
+		/// 推入一个环境类型，需要判断最上层是否已经是相同的类型。
+		/// 如果是相同类型，则不推入栈中
+		/// </summary>
+		/// <param name="environment">Environment.环境类型</param>
+		public void PushEnvironment (Environment environment)
+		{
+
+		}
+
+		/// <summary>
+		/// Poping a environment type out stack.
+		/// 
+		/// </summary>
+		/// <param name="environment">Environment.环境类型</param>
+		public void PopEnvironment (Environment environment)
+		{
+
+		}
 		public override void SingletonInit ()
 		{
 			base.SingletonInit ();
@@ -67,25 +123,25 @@ namespace Skylight
 		/// </summary>
 		/// <param name="deviceType">Device type.</param>
 		/// <param name="isOpen">If set to <c>true</c> is open.</param>
-		public void SwitchDeviceInput (DeviceType deviceType, bool isOpen)
-		{
-			switch (deviceType) {
-			case DeviceType.Desktop:
+		//public void SwitchDeviceInput (DeviceType deviceType, bool isOpen)
+		//{
+		//	switch (deviceType) {
+		//	case DeviceType.Desktop:
 
-				m_isDesktop = isOpen;
+		//		m_isDesktop = isOpen;
 
-				break;
+		//		break;
 
-			case DeviceType.Handheld:
-				m_isHandheld = isOpen;
-				//if (m_isHandheld) {
-				//	ShowUI ();
-				//} else {
-				//	CloseUI ();
-				//}
-				break;
-			}
-		}
+		//	case DeviceType.Handheld:
+		//		m_isHandheld = isOpen;
+		//		//if (m_isHandheld) {
+		//		//	ShowUI ();
+		//		//} else {
+		//		//	CloseUI ();
+		//		//}
+		//		break;
+		//	}
+		//}
 
 
 
