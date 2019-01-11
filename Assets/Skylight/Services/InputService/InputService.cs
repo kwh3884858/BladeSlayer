@@ -150,45 +150,7 @@ namespace Skylight
 			m_inputControl.Init ();
 		}
 
-		/// <summary>
-		/// Switchs the device input.(deprecated)
-		/// 切换输入类型。被弃用。不要使用它。
-		/// </summary>
-		/// <param name="deviceType">Device type.</param>
-		/// <param name="isOpen">If set to <c>true</c> is open.</param>
-		//public void SwitchDeviceInput (DeviceType deviceType, bool isOpen)
-		//{
-		//	switch (deviceType) {
-		//	case DeviceType.Desktop:
 
-		//		m_isDesktop = isOpen;
-
-		//		break;
-
-		//	case DeviceType.Handheld:
-		//		m_isHandheld = isOpen;
-		//		//if (m_isHandheld) {
-		//		//	ShowUI ();
-		//		//} else {
-		//		//	CloseUI ();
-		//		//}
-		//		break;
-		//	}
-		//}
-
-
-
-		//void ShowUI ()
-		//{
-		//	m_inputControl.Show ();
-
-		//}
-
-		//void CloseUI ()
-		//{
-		//	m_inputControl.Close ();
-
-		//}
 	}
 
 }

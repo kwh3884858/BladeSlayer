@@ -1,5 +1,61 @@
 # BladeSlayer
+#### Project Introduction
+A cyberpunk-style action-playing game with unique rendering effects.
 
+
+#### Introduction to play
+
+
+#### Collaborative Instructions
+
+1. ** clone remote repository** `git clone https://github.com/kwh3884858/BladeSlayer`
+2. **Enter the warehouse** `cd BladeSlayer` Switch to the repository
+3. **View branch** `git branch` If you are sure that you are on the master, there is no problem.
+4. **Update the repository** `git pull`
+5. **Branch description**, `master` is the **main branch**, `dev` is the **development branch**.
+6. **Switch to development branch** `git checkout dev`
+7. **Modify bugs, ** **Add new features**
+   - `git add <filename>` filename can also use * to indicate all
+   - `git commit -m "message"` message format below
+   - `git push origin dev` push your own changes
+   - `git pull` fetches new commits from the repository (if the push fails, the update first resolves the conflict)
+8. **Daily development** `git pull` and then connect 6, continue to iterative development
+
+> The master branch is merged by the administrator to prevent bugs from crashing in later projects. There is no need to roll back directly, and the master is a stable version. Every time dev updates new features and there are no bugs, the administrator merges once.
+
+#### format requirement 
+
+**commit** information inside: <type> : <body> <footer>
+
+Type must have, body and footer optional.
+
+Type:
+
+- feat: new features
+- fix: fix bug
+- docs: documentation
+- style: format (code function logic is unchanged)
+- refactor: refactoring
+- test: test file
+- chore: changes to the aids
+
+The common information is as follows:
+
+`git commit -m "fix: modify a certain bug" `
+
+`git commit -m "feat: add new features"
+
+The footer can be omitted later, if the description is clear enough.
+
+If you mistyped the information yourself
+
+`git commit --amend`
+
+Enter the modified commit message to save
+
+`git push <remote> <branch> -f `
+   
+---
 #### 项目介绍
 一款赛博朋克风格的，具有独特渲染效果的动作角色扮演游戏。
 

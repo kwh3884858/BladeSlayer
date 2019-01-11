@@ -54,35 +54,6 @@ namespace Skylight
 		};
 
 		public List<float> m_buttonValue = new List<float> ();
-		////Dictionary<ControlType, Controller> m_controller =
-		////new Dictionary<ControlType, Controller> ();
-
-		//public ControlType [] m_playerController = {
-		//	ControlType.Move,
-		//	ControlType.Jump,
-		//	ControlType.Action,
-		//	ControlType.SoulControll,
-		//	//ControlType.SoulOut,
-		//	ControlType.Pause,
-		//};
-
-		//public ControlType [] m_deerController = {
-		//	ControlType.Move,
-		//	ControlType.Jump,
-		//	ControlType.Action,
-		//	ControlType.SoulOut,
-		//	ControlType.Pause,
-
-		//};
-
-		//public ControlType [] m_bearController = {
-		//	ControlType.Move,
-		//	ControlType.Jump,
-		//	ControlType.Action,
-		//	ControlType.SoulOut,
-		//	ControlType.Throw,
-		//	ControlType.Pause,
-		//};
 
 		//public Vector3 Move {
 		//	get {
