@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 namespace Skylight
 {
 
@@ -18,55 +20,69 @@ namespace Skylight
 		/// </summary>
 		public enum ControlType
 		{
-			Move,
+			HorizontalMove,
+			VerticalMove,
 			Jump,
+
 			Action,
-			Throw,
-			SoulControll,
-			SoulOut,
+			Talk,
+
+			Attack,
+			UseProp,
+
+			MenuPanel,
+
+			Comfirm,
+			Cancel,
 			Pause,
 		}
 
 
 
 		ControlType [] m_controlType = {
-			ControlType.Move,
+			ControlType.HorizontalMove,
+			ControlType.VerticalMove,
 			ControlType.Jump,
 			ControlType.Action,
-			ControlType.Throw,
-			ControlType.SoulControll,
-			ControlType.SoulOut,
-			ControlType.Pause,
-		};
-		//Dictionary<ControlType, Controller> m_controller =
-		//new Dictionary<ControlType, Controller> ();
-
-		public ControlType [] m_playerController = {
-			ControlType.Move,
-			ControlType.Jump,
-			ControlType.Action,
-			ControlType.SoulControll,
-			//ControlType.SoulOut,
+			ControlType.Talk,
+			ControlType.Attack,
+			ControlType.UseProp,
+			ControlType.MenuPanel,
+			ControlType.Comfirm,
+			ControlType.Cancel,
 			ControlType.Pause,
 		};
 
-		public ControlType [] m_deerController = {
-			ControlType.Move,
-			ControlType.Jump,
-			ControlType.Action,
-			ControlType.SoulOut,
-			ControlType.Pause,
+		public List<float> m_buttonValue = new List<float> ();
+		////Dictionary<ControlType, Controller> m_controller =
+		////new Dictionary<ControlType, Controller> ();
 
-		};
+		//public ControlType [] m_playerController = {
+		//	ControlType.Move,
+		//	ControlType.Jump,
+		//	ControlType.Action,
+		//	ControlType.SoulControll,
+		//	//ControlType.SoulOut,
+		//	ControlType.Pause,
+		//};
 
-		public ControlType [] m_bearController = {
-			ControlType.Move,
-			ControlType.Jump,
-			ControlType.Action,
-			ControlType.SoulOut,
-			ControlType.Throw,
-			ControlType.Pause,
-		};
+		//public ControlType [] m_deerController = {
+		//	ControlType.Move,
+		//	ControlType.Jump,
+		//	ControlType.Action,
+		//	ControlType.SoulOut,
+		//	ControlType.Pause,
+
+		//};
+
+		//public ControlType [] m_bearController = {
+		//	ControlType.Move,
+		//	ControlType.Jump,
+		//	ControlType.Action,
+		//	ControlType.SoulOut,
+		//	ControlType.Throw,
+		//	ControlType.Pause,
+		//};
 
 		//public Vector3 Move {
 		//	get {
@@ -131,7 +147,8 @@ namespace Skylight
 			//int deviceCount = InputService.Instance ().m_openDeviceType.Length;
 			int i = 0;
 			foreach (ControlType type in m_controlType) {
-				switch (type) {
+				m_buttonValue.Add (0);
+				//switch (type) {
 				//case ControlType.Move:
 				//	MoveContrller moveContrller = new MoveContrller ();
 				//	moveContrller.Init ();
@@ -179,12 +196,11 @@ namespace Skylight
 				//break;
 
 
-				default:
-					break;
-				}
+				//default:
+				//	break;
+				//}
 			}
 		}
-
 
 
 

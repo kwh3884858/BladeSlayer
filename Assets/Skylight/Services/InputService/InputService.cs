@@ -59,19 +59,15 @@ namespace Skylight
 	public class InputService : GameModule<InputService>
 	{
 
-		//public DeviceType [] m_openDeviceType = { DeviceType.Desktop, DeviceType.Handheld };
 
 		private InputControl m_inputControl;
-
-		//private bool m_isDesktop = false;
-		//private bool m_isHandheld = false;
 
 		/// <summary>
 		/// The is environment stack.
 		/// 这是环境栈，所有的场景，UI在定义时候，都会有一个对应的环境栈
 		/// 注册之前，需要往其中压入对应的栈
 		/// </summary>
-		private Stack<Environment> m_environment = new Stack<Environment> ();
+		private Stack<Environment> m_envStack = new Stack<Environment> ();
 
 
 		public InputControl Input {
@@ -80,21 +76,51 @@ namespace Skylight
 			}
 		}
 
-		public InputControl GetInput (Environment environment)
+		public float GetInput (Environment environment, InputType inputType)
 		{
-			return m_inputControl;
+
+			if (m_envStack.Peek () != environment) {
+
+				return m_inputControl.m_buttonValue [(int)inputType];
+			} else {
+				Debug.Log ("Type error!");
+				return 0;
+
+			}
+
+
+
+		}
+
+		public void SetInput (Environment environment, InputType inputType, float value)
+		{
+			try {
+				if (m_envStack.Peek () != environment) {
+					throw new System.Exception ("Environment type error!");
+				}
+				m_inputControl.m_buttonValue [(int)inputType] = value;
+			} catch (System.Exception e) {
+				Debug.Log (e.Message);
+			}
+
 		}
 		/// <summary>
 		/// Pushing a the environment into stack，
 		/// you need to judge whether the top of stack is already the same type
 		/// If it is the same type, it is not pushed onto the stack
 		/// 推入一个环境类型，需要判断最上层是否已经是相同的类型。
-		/// 如果是相同类型，则不推入栈中
+		/// 如果是相同类型，则不推入栈中，提示错误
 		/// </summary>
 		/// <param name="environment">Environment.环境类型</param>
-		public void PushEnvironment (Environment environment)
+		public bool PushEnvironment (Environment environment)
 		{
-
+			if (m_envStack.Peek () == environment) {
+				Debug.Log ("Error, top of stack already have a same type");
+				return false;
+			} else {
+				m_envStack.Push (environment);
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -102,9 +128,16 @@ namespace Skylight
 		/// 
 		/// </summary>
 		/// <param name="environment">Environment.环境类型</param>
-		public void PopEnvironment (Environment environment)
+		public bool PopEnvironment (Environment environment)
 		{
-
+			if (m_envStack.Peek () == environment) {
+				m_envStack.Pop ();
+				return true;
+			} else {
+				Debug.Log ("Error, top of stack doesn`t have " + environment +
+				" type.");
+				return true;
+			}
 		}
 		public override void SingletonInit ()
 		{
