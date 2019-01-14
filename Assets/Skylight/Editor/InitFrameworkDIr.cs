@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Text;
+using UnityEditor.SceneManagement;
 
 namespace Skylight
 {
-	public class InitFrameworkDir : Editor
+	public class InitFramework : Editor
 	{
 
 		/// <summary>
@@ -68,12 +69,81 @@ namespace Skylight
 
 		}
 
+		[MenuItem ("Assets/Framework/SetGameRoot")]
+		static void InitSceneBuildSetting ()
+		{
+			UnityEngine.SceneManagement.Scene currentScene;
 
-		[MenuItem ("Assets/Framework/TestButton")]
+			const string GameRootScenePath = "Scenes";
+			const string GameRootSceneName = "GameRoot.unity";
+			StringBuilder builder = new StringBuilder ();
+			builder.Append (Application.dataPath);
+			builder.Append ("/");
+			builder.Append (GameRootScenePath);
+
+			string path = builder.ToString ();
+			if (!Directory.Exists (path)) {
+				EditorGUILayout.HelpBox ("Now auto generate directory: " +
+				 GameRootScenePath, MessageType.Info, false);
+				Directory.CreateDirectory (path);
+			}
+
+			builder.Append ("/");
+			builder.Append (GameRootSceneName);
+			string gameRoot = builder.ToString ();
+			if (!File.Exists (gameRoot)) {
+				bool isAutoGenerate = EditorUtility.DisplayDialog ("Auto Generation",
+				"You don`t have GameRoot.unity scene." +
+				"Do you need to auto generate?" +
+				"Current scene will be save as GameRoot in Scenes fold",
+					"OK", "No, thanks");
+
+				if (isAutoGenerate) {
+					currentScene = EditorSceneManager.GetActiveScene ();
+					builder.Remove (0, Application.dataPath.Length - 6);
+					if (!EditorSceneManager.SaveScene (currentScene, builder.ToString (), false)) {
+						Debug.LogError ("Scene save error!");
+						return;
+					} else {
+						Debug.Log ("GameRoot scene generate in " + builder);
+					}
+
+				} else {
+					return;
+				}
+
+			}
+			currentScene = EditorSceneManager.GetActiveScene ();
+
+			Debug.Log ("Current Scene name is" + currentScene.name);
+
+		}
+
+		[MenuItem ("Assets/Framework/SetCurrentSceneAsFirstScene")]
+		static void SetCurrentSceneAsFirstScene ()
+		{
+			List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene> ();
+			UnityEngine.SceneManagement.Scene scene = EditorSceneManager.GetActiveScene ();
+			EditorBuildSettingsScene settingScene = new EditorBuildSettingsScene (scene.path, true);
+			scenes.Add (settingScene);
+			EditorBuildSettings.scenes = scenes.ToArray ();
+		}
+
+		[MenuItem ("Assets/Framework/SetCurrentSceneAsFirstScene", true)]
+		static bool SetCurrentSceneAsFirstSceneCheckValidate ()
+		{
+			return EditorSceneManager.GetActiveScene ().name == "GameRoot";
+		}
+
+		[MenuItem ("Assets/Framework/TestButton %t")]
 		static void TestButton ()
 		{
 
-			//Debug.Log (CreateAssetBundles.BuildTargetPlatform);
+
+
 		}
+
+
+
 	}
 }
