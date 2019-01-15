@@ -17,7 +17,7 @@ namespace Skylight
 
 		public void LogicStart ()
 		{
-			//Instance().OpenLogic<MainMenuLogic>();
+			Instance ().OpenLogic<MainMenuLogic> ();
 		}
 
 		public T AddLogic<T> () where T : LogicBase

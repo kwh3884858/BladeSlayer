@@ -69,7 +69,7 @@ namespace Skylight
 
 		}
 
-		[MenuItem ("Assets/Framework/SetGameRoot")]
+		[MenuItem ("Assets/Framework/CreateGameRootScene")]
 		static void InitSceneBuildSetting ()
 		{
 			UnityEngine.SceneManagement.Scene currentScene;
@@ -115,25 +115,41 @@ namespace Skylight
 			}
 			currentScene = EditorSceneManager.GetActiveScene ();
 
-			Debug.Log ("Current Scene name is" + currentScene.name);
+			Debug.Log ("Current Scene name is " + currentScene.name);
 
 		}
 
-		[MenuItem ("Assets/Framework/SetCurrentSceneAsFirstScene")]
-		static void SetCurrentSceneAsFirstScene ()
+		[MenuItem ("Assets/Framework/SetGameRootAsFirstScene")]
+		static void SetGameRootAsFirstScene ()
+		{
+			UnityEngine.SceneManagement.Scene scene = EditorSceneManager.GetActiveScene ();
+			SetBuildSettingFirstScene (scene);
+			SetPlayModeStartScene (scene.path);
+		}
+
+		[MenuItem ("Assets/Framework/SetGameRootAsFirstScene", true)]
+		static bool SetGameRootAsFirstSceneCheckValidate ()
+		{
+			return EditorSceneManager.GetActiveScene ().path == "Assets/Scenes/GameRoot.unity";
+		}
+
+		static void SetBuildSettingFirstScene (UnityEngine.SceneManagement.Scene scene)
 		{
 			List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene> ();
-			UnityEngine.SceneManagement.Scene scene = EditorSceneManager.GetActiveScene ();
 			EditorBuildSettingsScene settingScene = new EditorBuildSettingsScene (scene.path, true);
 			scenes.Add (settingScene);
 			EditorBuildSettings.scenes = scenes.ToArray ();
 		}
 
-		[MenuItem ("Assets/Framework/SetCurrentSceneAsFirstScene", true)]
-		static bool SetCurrentSceneAsFirstSceneCheckValidate ()
+		static void SetPlayModeStartScene (string scenePath)
 		{
-			return EditorSceneManager.GetActiveScene ().name == "GameRoot";
+			SceneAsset myWantedStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset> (scenePath);
+			if (myWantedStartScene != null)
+				EditorSceneManager.playModeStartScene = myWantedStartScene;
+			else
+				Debug.Log ("Could not find Scene " + scenePath);
 		}
+
 
 		[MenuItem ("Assets/Framework/TestButton %t")]
 		static void TestButton ()

@@ -75,7 +75,13 @@ namespace Skylight
 				return m_inputControl;
 			}
 		}
-
+		/// <summary>
+		/// Gets the input.
+		/// 获取一个输入
+		/// </summary>
+		/// <returns>The input.</returns>
+		/// <param name="environment">Environment.环境，应该由框架来处理并传入</param>
+		/// <param name="inputType">Input type.开发者需要指定一个想获取的输入类型</param>
 		public float GetInput (Environment environment, InputType inputType)
 		{
 
@@ -87,11 +93,15 @@ namespace Skylight
 				return 0;
 
 			}
-
-
-
 		}
 
+		/// <summary>
+		/// Sets the input.
+		/// 设置一个输入
+		/// </summary>
+		/// <param name="environment">Environment.环境，应该由框架来处理并传入</param>
+		/// <param name="inputType">Input type.开发者需要指定一个想获取的输入类型</param>
+		/// <param name="value">Value.需要传入该类型的数值</param>
 		public void SetInput (Environment environment, InputType inputType, float value)
 		{
 			try {
@@ -106,13 +116,16 @@ namespace Skylight
 		}
 		/// <summary>
 		/// Pushing a the environment into stack，
+		/// 推入一个环境变量到栈顶。
+		/// Attention, this interface is used by SceneManager
 		/// you need to judge whether the top of stack is already the same type
 		/// If it is the same type, it is not pushed onto the stack
+		/// 请注意，这个接口由框架中的场景管理器调用
 		/// 推入一个环境类型，需要判断最上层是否已经是相同的类型。
 		/// 如果是相同类型，则不推入栈中，提示错误
 		/// </summary>
 		/// <param name="environment">Environment.环境类型</param>
-		public bool PushEnvironment (Environment environment)
+		private bool PushEnvironment (Environment environment)
 		{
 			if (m_envStack.Peek () == environment) {
 				Debug.Log ("Error, top of stack already have a same type");
@@ -125,10 +138,14 @@ namespace Skylight
 
 		/// <summary>
 		/// Poping a environment type out stack.
-		/// 
+		/// 从栈顶弹出一个环境变量。
+		/// Attention, this interface is used by SceneManager
+		/// 请注意，这个接口由框架中的场景管理器调用
+		/// 推出一个环境类型，需要判断在栈顶是否存在相同的类型。
+		/// 如果不存在，则提示错误
 		/// </summary>
 		/// <param name="environment">Environment.环境类型</param>
-		public bool PopEnvironment (Environment environment)
+		private bool PopEnvironment (Environment environment)
 		{
 			if (m_envStack.Peek () == environment) {
 				m_envStack.Pop ();
