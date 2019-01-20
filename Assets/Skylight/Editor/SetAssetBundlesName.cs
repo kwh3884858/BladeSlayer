@@ -9,6 +9,8 @@ namespace Skylight
 
 	public class SetAssetBundlesName : Editor
 	{
+		//此处添加需要命名的资源后缀名,注意大小写。
+		static readonly string [] Filtersuffix = { ".mat", ".dds", ".prefab", ".unity" };
 
 		private static void SetAssetBundleName (string fullPath, string [] suffixs)
 		{
@@ -45,8 +47,6 @@ namespace Skylight
 			//获取选中文件
 			UnityEngine.Object [] SelectedAsset = Selection.GetFiltered (typeof (Object),
 								SelectionMode.Assets | SelectionMode.ExcludePrefab);
-			//此处添加需要命名的资源后缀名,注意大小写。
-			string [] Filtersuffix = { ".mat", ".dds", ".prefab" };
 
 			if (SelectedAsset.Length != 1) return;
 			string fullPath = AssetsManager.PROJECT_PATH + AssetDatabase.GetAssetPath (SelectedAsset [0]);
@@ -61,8 +61,6 @@ namespace Skylight
 			//此处添加需要统一打包的文件夹
 			string [] bundlesDirectory = { "UI", "Prefabs", "Scenes", "Models" };
 
-			//此处添加需要命名的资源后缀名,注意大小写。
-			string [] Filtersuffix = { ".mat", ".dds", ".prefab", ".unity" };
 
 			for (int i = 0; i < bundlesDirectory.Length; i++) {
 				string fullpath = AssetsManager.APPLICATION_PATH + "/" + bundlesDirectory [i];

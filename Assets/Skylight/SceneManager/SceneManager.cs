@@ -30,14 +30,14 @@ namespace Skylight
 				Debug.Log ("destroy");
 				mCurrentScene = null;
 			}
-
+			//todo:enhancement: refactor scenemanager
 			string name = typeof (T).ToString ();
 			GameObject uiObject;
 			if (!mAllScenes.TryGetValue (name, out uiObject)) {
 				//Debug.Log ("Poruduce new scene");
 				string perfbName = "Scenes/" + typeof (T).ToString ();
 				//Debug.Log ("Loaded Perfab : " + perfbName);
-				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
+				GameObject perfb = AssetsManager.LoadScene<GameObject> (perfbName);
 				uiObject = GameObject.Instantiate (perfb);
 				uiObject.name = name;
 

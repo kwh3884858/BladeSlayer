@@ -146,35 +146,36 @@ namespace Skylight
 			}
 		}
 
-		//public static string PERSISTENT_DATA_PATH
-		//{
-		//    get
-		//    {
-		//        if(Application.platform == RuntimePlatform.WindowsPlayer)
-		//        {
-		//            return dataPath + "/StreamingAssets/AssetBundle/";
-		//        }
-		//    }
-		//}
 
 		public static T LoadPrefab<T> (string path) where T : UnityEngine.Object
 		{
 #if UNITY_EDITOR
-			//string strName = "Assets/Prefabs/" + path + ".prefab";
-			//T go = AssetDatabase.LoadAssetAtPath<T> (strName);
-			//			Debug.Log (path);
-			//path = path.ToLower();
-			//T go = AssetBundleLoad.LoadGameObject(path) as T;
+
 
 			string strName = "Assets/" + path + ".prefab";
 			T go = AssetDatabase.LoadAssetAtPath<T> (strName);
-			//path = path.ToLower ();
-			//T go = AssetBundleLoad.LoadGameObject (path) as T;
+
 			return go;
 #else
-			//string strName = ASSETBUNDLE_PATH + path;
-            //Debug.Log(strName);
-			//GameObject.Find ("Console").GetComponent <Text>().text += "\n" + strName;
+
+			Console.Instance ().Debug (path);
+			path = path.ToLower ();
+			T go = AssetBundleLoad.LoadGameObject (path) as T;
+            return go;
+#endif
+		}
+
+		public static T LoadScene<T> (string path) where T : UnityEngine.Object
+		{
+#if UNITY_EDITOR
+
+
+			string strName = "Assets/" + path + ".unity";
+			T go = AssetDatabase.LoadAssetAtPath<T> (strName);
+
+			return go;
+#else
+
 			Console.Instance ().Debug (path);
 			path = path.ToLower ();
 			T go = AssetBundleLoad.LoadGameObject (path) as T;

@@ -5,35 +5,35 @@ using System;
 
 namespace Skylight
 {
-    /// <summary>
-    /// 逻辑类型，用于LogicManager
-    /// </summary>
-    public enum LogicType
-    {
-        SceneInit,
-        SceneOpen,
-        SceneClose,
-        SceneStart,
+	/// <summary>
+	/// 逻辑类型，用于EventManager
+	/// </summary>
+	public enum LogicType
+	{
+		SceneInit,
+		SceneOpen,
+		SceneClose,
+		SceneStart,
 
-        PanelInit,
-        PanelOpen,
-        PanelClose,
-        PanelStart,
+		PanelInit,
+		PanelOpen,
+		PanelClose,
+		PanelStart,
 
-        MainMenuInit,
-        MainMenuOpen,
-        MainMenuClose,
-        MainMenuStart,
+		MainMenuInit,
+		MainMenuOpen,
+		MainMenuClose,
+		MainMenuStart,
 
-        DialogPlayerStart,
-        DialogPlayerCallback,
+		DialogPlayerStart,
+		DialogPlayerCallback,
 
-        //切换语言的时候触发
-        Changelanguage,
+		//切换语言的时候触发
+		Changelanguage,
 
-    }
+	}
 
-    public class EventManager : GameModule<EventManager>
+	public class EventManager : GameModule<EventManager>
 	{
 		LogicBase m_currentLogic;
 
@@ -102,7 +102,7 @@ namespace Skylight
 			m_currentLogic.RegisterCallback (nEventID, handler);
 		}
 
-	
+
 	}
 
 }
