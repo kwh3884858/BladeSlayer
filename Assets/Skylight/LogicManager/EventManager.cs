@@ -5,7 +5,35 @@ using System;
 
 namespace Skylight
 {
-	public class LogicManager : GameModule<LogicManager>
+    /// <summary>
+    /// 逻辑类型，用于LogicManager
+    /// </summary>
+    public enum LogicType
+    {
+        SceneInit,
+        SceneOpen,
+        SceneClose,
+        SceneStart,
+
+        PanelInit,
+        PanelOpen,
+        PanelClose,
+        PanelStart,
+
+        MainMenuInit,
+        MainMenuOpen,
+        MainMenuClose,
+        MainMenuStart,
+
+        DialogPlayerStart,
+        DialogPlayerCallback,
+
+        //切换语言的时候触发
+        Changelanguage,
+
+    }
+
+    public class EventManager : GameModule<EventManager>
 	{
 		LogicBase m_currentLogic;
 
@@ -62,7 +90,7 @@ namespace Skylight
 			return t;
 		}
 
-		public void Notify (int eventId, LogicData vars = null)
+		public void Notify (int eventId, System.Object vars = null)
 		{
 			//Debug.Log ((SkylightStaticData.LogicType)eventId);
 			m_currentLogic.Notify (eventId, vars);
@@ -74,11 +102,7 @@ namespace Skylight
 			m_currentLogic.RegisterCallback (nEventID, handler);
 		}
 
-		public class LogicData
-		{
-			public string m_name;
-
-		}
+	
 	}
 
 }

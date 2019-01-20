@@ -13,7 +13,7 @@ namespace Skylight
 	// 这边暂时使用 MonoBehaviour 方便调试 后续会把他删除掉的
 	public class LogicBase : MonoBehaviour
 	{
-		public delegate bool LogicEventHandler (LogicManager.LogicData vars = null);
+		public delegate bool LogicEventHandler (System.Object vars = null);
 
 
 		public LogicBase ()
@@ -31,7 +31,7 @@ namespace Skylight
 			events.Add (handler);
 		}
 
-		public void DoEvent (int nEventID, LogicManager.LogicData vars = null)
+		public void DoEvent (int nEventID, System.Object vars = null)
 		{
 			ArrayList events;
 			if (!mhtEvent.TryGetValue (nEventID, out events)) {
@@ -71,7 +71,7 @@ namespace Skylight
 		virtual public void LogicShow () { }
 		virtual public void LogicClose () { }
 
-		virtual public void Notify (int eventId, LogicManager.LogicData vars = null) { }
+		virtual public void Notify (int eventId, System.Object vars = null) { }
 
 		virtual public void LogicStart (int eventId) { }
 

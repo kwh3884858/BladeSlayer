@@ -12,7 +12,7 @@ namespace Skylight
 			//AddGameObject<NetService>();
 			//DONT CHANGE ORDER
 			//不要修改顺序，有相互依赖关系
-			AddGameObject<LogicManager> ();
+			AddGameObject<EventManager> ();
 
 
 			AddGameObject<PollerService> ();
@@ -26,7 +26,7 @@ namespace Skylight
 			AddGameObject<UIManager> ();
 
 			AddGameObject<PrefabManager> ();
-			LogicManager.Instance ().LogicStart ();
+			EventManager.Instance ().LogicStart ();
 			//   AddGameObject<CameraService>();
 			AddGameObject<InputService> ();
 			AddGameObject<TimerService> ();

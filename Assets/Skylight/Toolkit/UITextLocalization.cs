@@ -11,11 +11,11 @@ public class UITextLocalization : MonoBehaviour
 	void Start ()
 	{
 		ShowText ();
-		LogicManager.Instance ().RegisterCallback ((int)SkylightStaticData.LogicType.Changelanguage, Changelanguage);
+		EventManager.Instance ().RegisterCallback ((int)LogicType.Changelanguage, Changelanguage);
 
 	}
 
-	private bool Changelanguage (LogicManager.LogicData vars)
+	private bool Changelanguage (System.Object vars)
 	{
 		Text m_textCom = GetComponent<Text> ();
 		m_textCom.text = Localization.Instance ().GetString (m_alias).Replace ("\\n", "\n");

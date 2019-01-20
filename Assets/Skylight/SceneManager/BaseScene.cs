@@ -25,16 +25,16 @@ namespace Skylight
 
 		public virtual void SceneInit ()
 		{
-			LogicManager.Instance ().Notify ((int)SkylightStaticData.LogicType.SceneInit);
+			EventManager.Instance ().Notify ((int)LogicType.SceneInit);
 		}
 		public virtual void SceneShow ()
 		{
-			LogicManager.Instance ().Notify ((int)SkylightStaticData.LogicType.SceneOpen);
+			EventManager.Instance ().Notify ((int)LogicType.SceneOpen);
 
 		}
 		public virtual void SceneClose ()
 		{
-			LogicManager.Instance ().Notify ((int)SkylightStaticData.LogicType.SceneClose);
+			EventManager.Instance ().Notify ((int)LogicType.SceneClose);
 
 		}
 

@@ -22,7 +22,7 @@ namespace Skylight
 		/// </summary>
 		public virtual void PanelInit ()
 		{
-			LogicManager.Instance ().Notify ((int)SkylightStaticData.LogicType.PanelInit);
+			EventManager.Instance ().Notify ((int)LogicType.PanelInit);
 		}
 
 
@@ -36,7 +36,7 @@ namespace Skylight
 		/// </summary>
 		public virtual void PanelOpen ()
 		{
-			LogicManager.Instance ().Notify ((int)SkylightStaticData.LogicType.PanelOpen);
+			EventManager.Instance ().Notify ((int)LogicType.PanelOpen);
 
 		}
 
@@ -44,7 +44,7 @@ namespace Skylight
 		//every close will call
 		public virtual void PanelClose ()
 		{
-			LogicManager.Instance ().Notify ((int)SkylightStaticData.LogicType.PanelClose);
+			EventManager.Instance ().Notify ((int)LogicType.PanelClose);
 
 		}
 

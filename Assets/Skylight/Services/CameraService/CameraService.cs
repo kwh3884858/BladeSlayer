@@ -19,10 +19,10 @@ namespace Skylight
 		public override void SingletonInit ()
 		{
 			base.SingletonInit ();
-            LogicManager.Instance().RegisterCallback((int)SkylightStaticData.LogicType.MainMenuOpen, SetCamera);
-            LogicManager.Instance().RegisterCallback((int)SkylightStaticData.LogicType.MainMenuClose, CameraClose);
-            LogicManager.Instance().RegisterCallback((int)SkylightStaticData.LogicType.SceneOpen, SetCamera);
-            LogicManager.Instance().RegisterCallback((int)SkylightStaticData.LogicType.SceneClose, CameraClose);
+            EventManager.Instance().RegisterCallback((int)LogicType.MainMenuOpen, SetCamera);
+            EventManager.Instance().RegisterCallback((int)LogicType.MainMenuClose, CameraClose);
+            EventManager.Instance().RegisterCallback((int)LogicType.SceneOpen, SetCamera);
+            EventManager.Instance().RegisterCallback((int)LogicType.SceneClose, CameraClose);
 
         }
 
@@ -53,7 +53,7 @@ namespace Skylight
 			m_cachedCamera.SetActive (flag);
 		}
 
-		public bool SetCamera (LogicManager.LogicData vars = null)
+		public bool SetCamera (System.Object vars = null)
 		{
 
 			m_mainCamera = GetCamera ();
@@ -64,7 +64,7 @@ namespace Skylight
 			return true;
 		}
 
-		public bool CameraClose (LogicManager.LogicData vars = null)
+		public bool CameraClose (System.Object vars = null)
 		{
 			Camera [] cameras = Camera.allCameras;
 			Debug.Log ("Camera Length:" + cameras.Length);

@@ -12,33 +12,6 @@ using UnityEngine;
 /// </summary>
 public class SkylightStaticData : MonoBehaviour
 {
-	/// <summary>
-	/// 逻辑类型，用于LogicManager
-	/// </summary>
-	public enum LogicType
-	{
-		SceneInit,
-		SceneOpen,
-		SceneClose,
-		SceneStart,
-
-		PanelInit,
-		PanelOpen,
-		PanelClose,
-		PanelStart,
-
-		MainMenuInit,
-		MainMenuOpen,
-		MainMenuClose,
-		MainMenuStart,
-
-		DialogPlayerStart,
-		DialogPlayerCallback,
-
-		//切换语言的时候触发
-		Changelanguage,
-
-	}
 
 	public enum PollerType
 	{
