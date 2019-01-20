@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using System.Text;
 
 public class PlayFromEmptyGameRoot : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class PlayFromEmptyGameRoot : MonoBehaviour
 		playFromFirstScene = !playFromFirstScene;
 		Menu.SetChecked (playFromFirstMenuStr, playFromFirstScene);
 
-		ShowNotifyOrLog (playFromFirstScene ? "Play from GameRoot scene" : "Play from current scene");
+        LogPrinter.ShowNotifyOrLog(playFromFirstScene ? "Play from GameRoot scene" : "Play from current scene");
 	}
 
 	// The menu won't be gray out, we use this validate method for update check state
@@ -32,12 +33,19 @@ public class PlayFromEmptyGameRoot : MonoBehaviour
 		return true;
 	}
 
-	// This method is called before any Awake. It's the perfect callback for this feature
-	[RuntimeInitializeOnLoadMethod (RuntimeInitializeLoadType.BeforeSceneLoad)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ApplyPerfabAndSetAllSceneFalse()
+    {
+
+    }
+
+    // This method is called before any Awake. It's the perfect callback for this feature
+    [RuntimeInitializeOnLoadMethod (RuntimeInitializeLoadType.AfterSceneLoad)]
 	static void LoadFirstSceneAtGameBegins ()
 	{
-		Debug.Log (SceneManager.GetActiveScene ().buildIndex);
-		if (SceneManager.GetActiveScene ().buildIndex == 0) {
+        LogPrinter.ShowSceneInfo();
+
+        if (SceneManager.GetActiveScene ().buildIndex == 0) {
 			foreach (GameObject go in SceneManager.GetActiveScene ().GetRootGameObjects ()) {
 				go.SetActive (false);
 				foreach (string name in openList) {
@@ -68,13 +76,6 @@ public class PlayFromEmptyGameRoot : MonoBehaviour
 
 	}
 
-	static void ShowNotifyOrLog (string msg)
-	{
-		if (Resources.FindObjectsOfTypeAll<SceneView> ().Length > 0)
-			EditorWindow.GetWindow<SceneView> ().ShowNotification (new GUIContent (msg));
-		else
-			Debug.Log (msg); // When there's no scene view opened, we just print a log
-	}
 
 	static IEnumerator AfterLoad ()
 	{
@@ -89,4 +90,6 @@ public class PlayFromEmptyGameRoot : MonoBehaviour
 		Undo.RegisterCreatedObjectUndo (goes, "Create " + goes.name);
 		Selection.activeObject = goes;
 	}
+
+   
 }

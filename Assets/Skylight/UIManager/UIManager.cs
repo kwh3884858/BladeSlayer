@@ -46,7 +46,7 @@ namespace Skylight
 			if (!dialogTran) {
 				string perfbName = "UI/Dialog/" + typeof (T).ToString ();
 				Debug.Log (perfbName);
-				GameObject perfb = AssetsManager.LoadPrefabs<GameObject> (perfbName);
+				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
 				if (perfb == null) {
 					Debug.Log ("UIDialog Can`t Find Perfab");
 				}
@@ -124,7 +124,7 @@ namespace Skylight
 			T panel = null;
 			if (panelTran == null) {
 				string perfbName = "UI/Overlay/" + typeof (T).ToString ();
-				GameObject perfb = AssetsManager.LoadPrefabs<GameObject> (perfbName);
+				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
 				if (perfb == null) {
 					Debug.Log ("UIOverlay Can`t Find Perfab");
 				}
@@ -207,7 +207,7 @@ namespace Skylight
 				} else {
 					perfbName = "Skylight/UI/Panel/" + typeof (T).ToString ();
 				}
-				GameObject perfb = AssetsManager.LoadPrefabs<GameObject> (perfbName);
+				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
 				if (perfb == null) {
 					Debug.Log ("UIPanel Can`t Find Perfab");
 				}
@@ -274,7 +274,7 @@ namespace Skylight
 			GameObject uiObject;
 			if (panelTran == null) {
 				string perfbName = "UI/Box/" + typeof (T).ToString ();
-				GameObject perfb = AssetsManager.LoadPrefabs<GameObject> (perfbName);
+				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
 				uiObject = GameObject.Instantiate (perfb);
 				uiObject.name = name;
 				T t = uiObject.AddComponent<T> ();

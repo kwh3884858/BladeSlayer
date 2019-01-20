@@ -71,7 +71,7 @@ namespace Skylight
 			AudioClip ac = null;
 			clipCache.TryGetValue (name, out ac);
 			if (ac == null) {
-				ac = AssetsManager.Load<AudioClip> ("Sound/" + name);
+				ac = AssetsManager.LoadPrefabFromResources<AudioClip> ("Sound/" + name);
 
 				//if (Application.platform == RuntimePlatform.OSXPlayer) {
 				//	ac = AssetsManager.Load<AudioClip> ("Sound/" + name);

@@ -59,10 +59,10 @@ namespace Skylight
 		static void SetAllAssetsBundleName ()
 		{
 			//此处添加需要统一打包的文件夹
-			string [] bundlesDirectory = { "UI", "Prefabs", "Scenes", "Sounds", "Models" };
+			string [] bundlesDirectory = { "UI", "Prefabs", "Scenes", "Models" };
 
 			//此处添加需要命名的资源后缀名,注意大小写。
-			string [] Filtersuffix = { ".mat", ".dds", ".prefab" };
+			string [] Filtersuffix = { ".mat", ".dds", ".prefab", ".unity" };
 
 			for (int i = 0; i < bundlesDirectory.Length; i++) {
 				string fullpath = AssetsManager.APPLICATION_PATH + "/" + bundlesDirectory [i];

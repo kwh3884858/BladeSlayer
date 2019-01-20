@@ -45,7 +45,7 @@ namespace Skylight
 		private void SetCachedCamera (bool flag)
 		{
 			if (m_cachedCamera == null) {
-                m_cachedCamera = Prefabmanager.Instance().LoadPrefab("");
+                m_cachedCamera = PrefabManager.Instance().LoadPrefab("");
 				m_cachedCamera = Instantiate (m_cachedCamera);
 				m_cachedCamera.transform.SetParent (transform);
 			}

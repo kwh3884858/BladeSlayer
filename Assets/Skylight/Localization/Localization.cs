@@ -17,11 +17,11 @@ namespace Skylight
 		{
 			string localLangId = System.Globalization.CultureInfo.InstalledUICulture.Name;
 			if (localLangId == "zh-CN") {
-				SetLanguage (LocalizationType.CN);
+				//SetLanguage (LocalizationType.CN);
 			}
 			// else if more...
 			else {
-				SetLanguage (LocalizationType.EN);
+				//SetLanguage (LocalizationType.EN);
 			}
 		}
 

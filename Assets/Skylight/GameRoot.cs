@@ -25,7 +25,7 @@ namespace Skylight
 
 			AddGameObject<UIManager> ();
 
-			AddGameObject<Prefabmanager> ();
+			AddGameObject<PrefabManager> ();
 			LogicManager.Instance ().LogicStart ();
 			//   AddGameObject<CameraService>();
 			AddGameObject<InputService> ();

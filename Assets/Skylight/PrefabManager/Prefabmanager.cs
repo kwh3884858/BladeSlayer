@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Skylight;
-public class Prefabmanager : GameModule<Prefabmanager> {
+public class PrefabManager : GameModule<PrefabManager> {
 
     Dictionary<string, GameObject> mAllScenes = new Dictionary<string, GameObject>();
 
@@ -15,7 +15,7 @@ public class Prefabmanager : GameModule<Prefabmanager> {
         }
         else
         {
-            GameObject perfb = AssetsManager.LoadPrefabs<GameObject>(name);
+            GameObject perfb = AssetsManager.LoadPrefab<GameObject>(name);
             if (perfb == null)
             {
                 Debug.Log(prefabName + "can`t find in Prefabs/" + prefabName);

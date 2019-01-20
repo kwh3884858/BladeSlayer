@@ -157,7 +157,7 @@ namespace Skylight
 		//    }
 		//}
 
-		public static T LoadPrefabs<T> (string path) where T : UnityEngine.Object
+		public static T LoadPrefab<T> (string path) where T : UnityEngine.Object
 		{
 #if UNITY_EDITOR
 			//string strName = "Assets/Prefabs/" + path + ".prefab";
@@ -221,7 +221,7 @@ namespace Skylight
 		}
 
 
-		public static T Load<T> (string path) where T : UnityEngine.Object
+		public static T LoadPrefabFromResources<T> (string path) where T : UnityEngine.Object
 		{
 #if UNITY_EDITOR
 			//string strName = "Assets/" + path;

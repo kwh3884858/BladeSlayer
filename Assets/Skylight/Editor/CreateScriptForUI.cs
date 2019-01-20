@@ -6,7 +6,7 @@ using System.IO;
 using UnityEngine.UI;
 namespace Skylight
 {
-	public class CreateScriptMenuitem : MonoBehaviour
+	public class CreateScriptForUI : MonoBehaviour
 	{
 
 
