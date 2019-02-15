@@ -9,8 +9,11 @@ namespace Skylight
 {
 	public class BaseScene : MonoBehaviour
 	{
+		public string m_sceneName;
+
 		// Use this for initialization
 		public Dictionary<string, object> m_UserData = null;
+
 		void Start ()
 		{
 		}
@@ -23,18 +26,20 @@ namespace Skylight
 			go.transform.SetParent (transform);
 		}
 
-		public virtual void SceneInit ()
+		public virtual void SceneInit (string sceneName)
 		{
-			EventManager.Instance ().Notify ((int)LogicType.SceneInit);
+			m_sceneName = sceneName;
+
+			//EventManager.Instance ().Notify ((iwwqnt)LogicType.SceneInit);
 		}
 		public virtual void SceneShow ()
 		{
-			EventManager.Instance ().Notify ((int)LogicType.SceneOpen);
+			//EventManager.Instance ().Notify ((int)LogicType.SceneOpen);
 
 		}
 		public virtual void SceneClose ()
 		{
-			EventManager.Instance ().Notify ((int)LogicType.SceneClose);
+			//EventManager.Instance ().Notify ((int)LogicType.SceneClose);
 
 		}
 

@@ -43,7 +43,7 @@ namespace Skylight
 
 				T t = uiObject.AddComponent<T> ();
 				uiObject.transform.SetParent (transform);
-				t.SceneInit ();
+				t.SceneInit (name);
 
 				mAllScenes.Add (name, uiObject);
 			} else {
