@@ -6,26 +6,26 @@ using System.IO;
 
 namespace Skylight
 {
-    public static class CreateAssetBundles
-    {
+	public static class CreateAssetBundles
+	{
 
 #if UNITY_WEBPLAYER
          static   BuildTarget target = BuildTarget.WebPlayer;
 #elif UNITY_STANDALONE_WIN && UNITY_EDITOR
         static    BuildTarget target = BuildTarget.StandaloneWindows;
-#elif UNITY_ANDROID 
+#elif UNITY_ANDROID
         static BuildTarget target = BuildTarget.Android;
-#elif UNITY_IPHONE 
+#elif UNITY_IPHONE
           static  BuildTarget target = BuildTarget.iPhone;
 #elif UNITY_STANDALONE_OSX
-        static  BuildTarget target = BuildTarget.StandaloneOSX;
+		static BuildTarget target = BuildTarget.StandaloneOSX;
 #endif
- 
 
-        [MenuItem ("Assets/AssetBundles/BuildAssetBundles")]
+
+		[MenuItem ("Assets/AssetBundles/BuildAssetBundles")]
 		public static void BuildAllAssetBundles ()
 		{
-			string assetBundleDirectory = "Assets/StreamingAssets/AssetBundle/";
+			string assetBundleDirectory = "Assets/StreamingAssets/AssetBundle/" + AssetsUtility.GetPlatformName () + "/";
 
 			//	BuildPipeline.BuildAssetBundles (assetBundleDirectory, BuildAssetBundleOptions.None, BuildTarget.StandaloneOSX);
 
@@ -38,13 +38,12 @@ namespace Skylight
 			BuildPipeline.BuildAssetBundles (
 				assetBundleDirectory,
 				BuildAssetBundleOptions.ChunkBasedCompression |
-				BuildAssetBundleOptions.DeterministicAssetBundle| BuildAssetBundleOptions.ForceRebuildAssetBundle
-               ,
-                 target);
+				BuildAssetBundleOptions.DeterministicAssetBundle | BuildAssetBundleOptions.ForceRebuildAssetBundle,
+				 target);
 
 			AssetDatabase.Refresh ();
-            //BuildAssetBundleOptions.ForceRebuildAssetBundle
+			//BuildAssetBundleOptions.ForceRebuildAssetBundle
 
-        }
+		}
 	}
 }

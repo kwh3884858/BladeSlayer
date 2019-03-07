@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System;
 
 namespace Skylight
 {
@@ -12,7 +13,10 @@ namespace Skylight
 		public string m_sceneName;
 
 		// Use this for initialization
-		public Dictionary<string, object> m_UserData = null;
+		public object m_sceneData = null;
+
+
+		//public event EventHandler<ShowSceneEvent> m_sceneEvents;
 
 		void Start ()
 		{
@@ -29,12 +33,24 @@ namespace Skylight
 		public virtual void SceneInit (string sceneName)
 		{
 			m_sceneName = sceneName;
+			//Regist Event
+			EventManager.Instance ().AddEventListener<SceneLoadedEvent> (SceneLoaded);
+			EventManager.Instance ().AddEventListener<SceneEnterEvent> (SceneEnter);
+			EventManager.Instance ().AddEventListener<SceneLeaveEvent> (SceneLeave);
 
 			//EventManager.Instance ().Notify ((iwwqnt)LogicType.SceneInit);
 		}
-		public virtual void SceneShow ()
+		public virtual void SceneLoaded (object sender, SceneLoadedEvent showSceneEvent)
 		{
-			//EventManager.Instance ().Notify ((int)LogicType.SceneOpen);
+
+		}
+		public virtual void SceneEnter (object sender, SceneEnterEvent showSceneEvent)
+		{
+
+		}
+
+		public virtual void SceneLeave (object sender, SceneLeaveEvent showSceneEvent)
+		{
 
 		}
 		public virtual void SceneClose ()
@@ -42,10 +58,15 @@ namespace Skylight
 			//EventManager.Instance ().Notify ((int)LogicType.SceneClose);
 
 		}
-
 		public virtual void SceneDestory ()
 		{
 
 		}
+
+		//protected virtual void OnShowScene (ShowSceneEvent e)
+		//{
+		//	EventHandler<ShowSceneEvent> temp = m_sceneEvents;
+		//	if (temp != null) temp (this, e);
+		//}
 	}
 }

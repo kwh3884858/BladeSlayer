@@ -91,7 +91,7 @@ namespace Skylight
 			UnityEngine.Object [] SelectedAsset = Selection.GetFiltered (typeof (Object),
 									SelectionMode.Assets | SelectionMode.ExcludePrefab);
 			//此处添加需要命名的资源后缀名,注意大小写。
-			string [] Filtersuffix = new string [] { ".prefab", ".mat", ".dds" };
+			//string [] Filtersuffix = new string [] { ".prefab", ".mat", ".dds" };
 
 			if (!(SelectedAsset.Length == 1)) return;
 

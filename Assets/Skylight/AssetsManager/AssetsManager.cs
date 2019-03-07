@@ -14,6 +14,8 @@ namespace Skylight
 	public class AssetsManager : GameModule<AssetsManager>
 	{
 
+		//AssetBundleLoad m_assetBundleLoader;
+		private AssetBundleManager abm;
 		//AssetBundle打包路径/assets/StreamingAssets
 		//public static string ASSETBUNDLE_PATH = Application.dataPath + "/StreamingAssets/AssetBundle/";
 
@@ -146,6 +148,34 @@ namespace Skylight
 			}
 		}
 
+		public override void SingletonInit ()
+		{
+			base.SingletonInit ();
+
+			//AssetBundleLoad.Initialize (ASSETBUNDLE_FILENAME + "/" + AssetsUtility.GetPlatformName () + "/" + AssetsUtility.GetPlatformName ());
+
+			//AssetBundleLoad.overrideBaseDownloadingURL += OverrideBaseDownloadingURLWithPlatform;
+			abm = new AssetBundleManager ();
+			abm.SetPrioritizationStrategy (AssetBundleManager.PrioritizationStrategy.PrioritizeStreamingAssets);
+			abm.UseSimulatedUri ();
+			abm.Initialize (OnAssetBundleManagerInitialized);
+
+		}
+
+		private void OnAssetBundleManagerInitialized (bool success)
+		{
+			if (success)
+				Debug.Log ("Assetbundle Manager loaded finish.");
+			else
+				Debug.Log ("Assetbundle Manager loaded failed");
+			//Application.LoadLevelAdditiveAsync (levelName);
+		}
+
+
+		//public static string OverrideBaseDownloadingURLWithPlatform (string bundleName)
+		//{
+		//	return AssetsUtility.GetPlatformName () + "/" + bundleName;
+		//}
 
 		public static T LoadPrefab<T> (string path) where T : UnityEngine.Object
 		{
@@ -164,25 +194,120 @@ namespace Skylight
             return go;
 #endif
 		}
-
-		public static T LoadScene<T> (string path) where T : UnityEngine.Object
+		//public delegate void SceneLoadFinish ();
+		public void LoadScene (
+			string sceneName,
+			UnityEngine.SceneManagement.LoadSceneMode mode
+			)
 		{
 #if UNITY_EDITOR
+			//string levelName = "scenes/scene1.unity3d";
+			if (abm != null) {
+				abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnAssetBundleDownloaded);
+			} else {
+				Debug.LogError ("Error initializing ABM.");
+			}
+			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+			////old style
+			//string strName = "Assets/" + path + ".unity";
+			//T go = AssetDatabase.LoadAssetAtPath<T> (strName);
+
+			//new style: load from scenemanger
+
+			//AsyncOperation asyncLoad = new AsyncOperation ();
+
+			//StartCoroutine (InitializeLevelAsync (sceneName, mode));
 
 
-			string strName = "Assets/" + path + ".unity";
-			T go = AssetDatabase.LoadAssetAtPath<T> (strName);
-
-			return go;
 #else
-
-			Console.Instance ().Debug (path);
-			path = path.ToLower ();
-			T go = AssetBundleLoad.LoadGameObject (path) as T;
-            return go;
+			//StartCoroutine (InitializeLevelAsync (sceneName, mode));
+			//Console.Instance ().Debug (path);
+			//path = path.ToLower ();
+			//T go = AssetBundleLoad.LoadGameObject (path) as T;
+            //return go;
 #endif
 		}
+		private void OnAssetBundleDownloaded (AssetBundle bundle)
+		{
+			if (bundle != null) {
+				// Do something with the bundle
+				abm.UnloadBundle (bundle);
+			}
 
+			abm.Dispose ();
+		}
+
+		IEnumerator InitializeLevelAsync (string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode)
+		{
+			yield return null;
+			AssetBundleLoadOperation operation;
+			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder ("scenes/", 3);
+			stringBuilder.Append (sceneName);
+			stringBuilder.Append (".unity3d");
+			switch (mode) {
+			case UnityEngine.SceneManagement.LoadSceneMode.Single:
+
+				operation = AssetBundleLoad.LoadLevelAsync (stringBuilder.ToString (), sceneName, false);
+				if (operation == null)
+					yield break;
+				yield return StartCoroutine (operation);
+				break;
+
+			case UnityEngine.SceneManagement.LoadSceneMode.Additive:
+				operation = AssetBundleLoad.LoadLevelAsync (stringBuilder.ToString (), sceneName, true);
+				if (operation == null)
+					yield break;
+				yield return StartCoroutine (operation);
+				break;
+
+
+			}
+
+			//string strName = "Assets/" + sceneName + ".unity";
+			//AssetBundleCreateRequest bundleLoadRequest = AssetBundle.LoadFromFileAsync (Path.Combine (STREAMING_PATH, sceneName));
+			//yield return bundleLoadRequest;
+
+			//AssetBundle myLoadedAssetBundle = bundleLoadRequest.assetBundle;
+			//if (myLoadedAssetBundle == null) {
+			//	Debug.Log ("Failed to load AssetBundle!");
+			//	yield break;
+			//}
+
+			//var assetLoadRequest = myLoadedAssetBundle.LoadAssetAsync<GameObject> ("MyObject");
+			//yield return assetLoadRequest;
+
+			//GameObject prefab = assetLoadRequest.asset as GameObject;
+			//Instantiate (prefab);
+			//myLoadedAssetBundle.Unload (false);
+
+			//asyncOperation.allowSceneActivation = false;
+			//while (!asyncOperation.isDone) {
+
+			//	//Output the current progress
+			//	Debug.Log ("Loading progress: " + (asyncOperation.progress * 100) + "%");
+
+			//	// Check if the load has finished
+			//	if (asyncOperation.progress >= 0.9f) {
+			//		//Change the Text to show the Scene is ready
+			//		Debug.Log ("Press the space bar to continue");
+			//		//Wait to you press the space key to activate the Scene
+			//		if (Input.GetKeyDown (KeyCode.Space))
+			//			//Activate the Scene
+			//			asyncOperation.allowSceneActivation = true;
+			//	}
+
+			//	yield return null;
+			//}
+			////if current scene is the now loaded scene, set it to variety
+			//UnityEngine.SceneManagement.Scene scene =
+			//UnityEngine.SceneManagement.SceneManager.GetActiveScene ();
+
+			//if (scene.name == sceneName) {
+			//	m_currentScene = scene;
+			//}
+
+		}
 		public static GameObject LoadMaterialPrefabs (string path)
 		{
 #if UNITY_EDITOR

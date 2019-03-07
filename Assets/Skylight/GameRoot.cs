@@ -19,7 +19,8 @@ namespace Skylight
 
 			//依赖Poller
 			//AddGameObject<Localization> ();
-
+			//Initialize asset bundle loader and assetmanager
+			AddGameObject<AssetsManager> ();
 			AddGameObject<SceneManager> ();
 			AddGameObject<SoundService> ();
 
@@ -33,13 +34,20 @@ namespace Skylight
 			AddGameObject<Console> ();
 			AddGameObject<Localization> ();
 			//UIManager.Instance().ShowPanel<UIButtonPanel>();
-
+			//SceneManager.Instance().LoadScene()
 			// UIManager.Instance().ShowPanel<UIButtonPanel>();
 			//SceneManager.Instance ().ShowScene<SceneCave> ();
 			//UIManager.Instance ().ShowPanel<UIMainMenu> ();
 			//UIManager.Instance().ShowPanel<UIMainMenuPanel>();
+			StartCoroutine (AfterInitialize ());
 		}
+		IEnumerator AfterInitialize ()
+		{
+			yield return null;
+			SceneManager.Instance ().LoadScene ("Scene1", SceneLoadMode.Additive);
+			SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
 
+		}
 		// Update is called once per frame
 		void Update ()
 		{

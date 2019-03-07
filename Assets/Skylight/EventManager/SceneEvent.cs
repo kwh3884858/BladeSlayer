@@ -4,26 +4,46 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Skylight
 {
-	public class SceneEvent : EventArgs
+	abstract public class SceneEvent : EventArgs
 	{
 
-		private readonly string m_sceneName, m_sceneParent;
+		private string m_sceneName;
 
-		public SceneEvent (string sceneName, string sceneParent)
+		protected SceneEvent (string sceneName)
 		{
 			m_sceneName = sceneName;
-			m_sceneParent = sceneParent;
-		}
-
-
-		public string GetSceneParent ()
-		{
-			return m_sceneParent;
 		}
 
 		public string GetSceneName ()
 		{
 			return m_sceneName;
+		}
+	}
+
+	public class SceneLoadedEvent : SceneEvent
+	{
+		public SceneLoadedEvent (string sceneName) :
+		 base (sceneName)
+		{
+
+		}
+	}
+
+	public class SceneEnterEvent : SceneEvent
+	{
+		public SceneEnterEvent (string sceneName) :
+		 base (sceneName)
+		{
+
+		}
+	}
+
+	public class SceneLeaveEvent : SceneEvent
+	{
+		public SceneLeaveEvent (string sceneName) :
+		 base (sceneName)
+		{
+
 		}
 	}
 

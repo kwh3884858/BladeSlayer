@@ -102,7 +102,22 @@ namespace Skylight
 			m_currentLogic.RegisterCallback (nEventID, handler);
 		}
 
+		//new one
+		public Dictionary<string, EventHandler<EventArgs>> m_allEvent =
+		new Dictionary<string, EventHandler<EventArgs>> ();
 
+		public void AddEventListener<T> (EventHandler<T> handler) where T : EventArgs
+		{
+			m_allEvent.Add (typeof (T).ToString (), handler as EventHandler<EventArgs>);
+		}
+		public void RemoveEventListener () { }
+		public void SendEvent<T> (T message) where T : EventArgs
+		{
+			string eventName = typeof (T).ToString ();
+			if (!m_allEvent.ContainsKey (eventName)) { return; };
+			EventHandler<T> temp = m_allEvent [eventName] as EventHandler<T>;
+			if (temp != null) temp (this, message);
+		}
 	}
 
 }

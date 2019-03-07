@@ -3,6 +3,8 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+[Rr]elease/
+[Rr]eleases/
 Assets/AssetStoreTools*
 StreamingAssets/
 StreamingAssets.meta
@@ -35,7 +37,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-
 
 .vs/
 .idea/
