@@ -1,4 +1,29 @@
 # BladeSlayer
+
+#### BladeSlayer Documents
+
+通过链接，你可以查看，并且修改文档
+
+
+
+- Concept Design概念设计:
+
+https://docs.qq.com/doc/DWXlKeVRRUkNEWUxh
+
+
+
+- GDD(Game Design Document)游戏设计文档:
+
+https://docs.qq.com/doc/DWW9FdEZDd1ViQXRV
+
+
+
+- ADD(Art Design Document)艺术设计文档:
+
+https://docs.qq.com/doc/DWWdLc0Vya3hWZnZI
+
+
+
 #### Project Introduction
 A cyberpunk-style action-playing game with unique rendering effects.
 
