@@ -275,6 +275,52 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aedb9ce19da29442086518a11f7ffa67, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1001 &1182374439
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077007660636454, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753144391498772, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6f7fda3d3f43f4482813853697416890, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &1313988070
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +466,7 @@ GameObject:
   - component: {fileID: 2112600228}
   - component: {fileID: 2112600227}
   - component: {fileID: 2112600226}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: New Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

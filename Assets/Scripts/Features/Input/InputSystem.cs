@@ -5,6 +5,7 @@ using Skylight;
 public sealed class InputSystem : IExecuteSystem
 {
 	readonly Contexts _contexts;
+	private Vector2 m_input;
 
 	public InputSystem (Contexts contexts)
 	{
@@ -27,15 +28,14 @@ public sealed class InputSystem : IExecuteSystem
 
 	void emitInput ()
 	{
-		float input = Skylight.InputService.Instance ().GetAxis (KeyMap.Horizontal);
-
-		if (input >= 0.1f || input <= -0.1f) {
+		m_input.x = InputService.Instance ().GetAxis (KeyMap.Horizontal);
+		m_input.y = InputService.Instance ().GetAxis (KeyMap.Vertical);
+		//Debug.Log (m_input);
+		if (m_input.x > 0.1f || m_input.x < -0.1f || m_input.y > 0.1f) {
 			//var mouseWorldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			//Debug.Log (m_input);
 			InputEntity e = _contexts.input.CreateEntity ();
-			e.AddInput (new Vector2 (
-				input,
-				0
-			));
+			e.AddInput (m_input);
 		}
 	}
 }

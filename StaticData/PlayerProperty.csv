@@ -1,0 +1,11 @@
+ MoveController,Value
+ m_groundVerticalSpeed , 8f,
+ m_jumpingVerticalSpeed , 4f,
+m_jumpForce , 20f,
+ m_groundDetectionlength , 0.1f,
+
+ Rigidbody2D,Value,
+ Mass,1
+ LinearDrag ,2,
+ AngularDrag,0
+ GravityScale,5,

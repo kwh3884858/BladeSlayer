@@ -16,7 +16,7 @@ namespace Skylight
 
 		public virtual float Value {
 			get {
-				return Mathf.Clamp (m_value + Input.GetAxis (m_mappingKey), -1f, 1f);
+				return Mathf.Clamp (m_value + Input.GetAxisRaw (m_mappingKey), -1f, 1f);
 			}
 			set {
 				m_value = value;
