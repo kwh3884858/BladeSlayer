@@ -6,25 +6,25 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed class VelocityEventSystem : Entitas.ReactiveSystem<GameEntity> {
+public sealed class VelocityEventSystem : Entitas.ReactiveSystem<PlayerEntity> {
 
     readonly System.Collections.Generic.List<IVelocityListener> _listenerBuffer;
 
-    public VelocityEventSystem(Contexts contexts) : base(contexts.game) {
+    public VelocityEventSystem(Contexts contexts) : base(contexts.player) {
         _listenerBuffer = new System.Collections.Generic.List<IVelocityListener>();
     }
 
-    protected override Entitas.ICollector<GameEntity> GetTrigger(Entitas.IContext<GameEntity> context) {
+    protected override Entitas.ICollector<PlayerEntity> GetTrigger(Entitas.IContext<PlayerEntity> context) {
         return Entitas.CollectorContextExtension.CreateCollector(
-            context, Entitas.TriggerOnEventMatcherExtension.Added(GameMatcher.Velocity)
+            context, Entitas.TriggerOnEventMatcherExtension.Added(PlayerMatcher.Velocity)
         );
     }
 
-    protected override bool Filter(GameEntity entity) {
+    protected override bool Filter(PlayerEntity entity) {
         return entity.hasVelocity && entity.hasVelocityListener;
     }
 
-    protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
+    protected override void Execute(System.Collections.Generic.List<PlayerEntity> entities) {
         foreach (var e in entities) {
             var component = e.velocity;
             _listenerBuffer.Clear();

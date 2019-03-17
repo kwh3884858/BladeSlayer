@@ -18,7 +18,7 @@ public class MoveController : MonoBehaviour, IVelocityListener
 	//public virtual void LinkMove (IEntity entity)
 	//{
 	//	gameObject.Link (entity);
-	//	GameEntity e = (GameEntity)entity;
+	//	PlayerEntity e = (PlayerEntity)entity;
 
 	//	e.AddVelocityListener (this);
 
@@ -36,7 +36,7 @@ public class MoveController : MonoBehaviour, IVelocityListener
 		m_leftButton = m_collider2D.bounds.min;
 	}
 
-	public virtual void OnVelocity (GameEntity entity, Vector2 vector)
+	public virtual void OnVelocity (PlayerEntity entity, Vector2 vector)
 	{
 		m_centerButton = (Vector2)m_collider2D.bounds.min + new Vector2 (m_collider2D.bounds.extents.x, 0);
 

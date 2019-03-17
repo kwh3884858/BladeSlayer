@@ -21,14 +21,18 @@ public partial class Contexts : Entitas.IContexts {
 
     static Contexts _sharedInstance;
 
+    public EnemyContext enemy { get; set; }
     public GameContext game { get; set; }
     public InputContext input { get; set; }
+    public PlayerContext player { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { game, input }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { enemy, game, input, player }; } }
 
     public Contexts() {
+        enemy = new EnemyContext();
         game = new GameContext();
         input = new InputContext();
+        player = new PlayerContext();
 
         var postConstructors = System.Linq.Enumerable.Where(
             GetType().GetMethods(),
@@ -63,8 +67,10 @@ public partial class Contexts {
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeContextObservers() {
         try {
+            CreateContextObserver(enemy);
             CreateContextObserver(game);
             CreateContextObserver(input);
+            CreateContextObserver(player);
         } catch(System.Exception) {
         }
     }

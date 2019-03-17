@@ -6,25 +6,25 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed class DestroyedEventSystem : Entitas.ReactiveSystem<GameEntity> {
+public sealed class DestroyedEventSystem : Entitas.ReactiveSystem<PlayerEntity> {
 
     readonly System.Collections.Generic.List<IDestroyedListener> _listenerBuffer;
 
-    public DestroyedEventSystem(Contexts contexts) : base(contexts.game) {
+    public DestroyedEventSystem(Contexts contexts) : base(contexts.player) {
         _listenerBuffer = new System.Collections.Generic.List<IDestroyedListener>();
     }
 
-    protected override Entitas.ICollector<GameEntity> GetTrigger(Entitas.IContext<GameEntity> context) {
+    protected override Entitas.ICollector<PlayerEntity> GetTrigger(Entitas.IContext<PlayerEntity> context) {
         return Entitas.CollectorContextExtension.CreateCollector(
-            context, Entitas.TriggerOnEventMatcherExtension.Added(GameMatcher.Destroyed)
+            context, Entitas.TriggerOnEventMatcherExtension.Added(PlayerMatcher.Destroyed)
         );
     }
 
-    protected override bool Filter(GameEntity entity) {
+    protected override bool Filter(PlayerEntity entity) {
         return entity.isDestroyed && entity.hasDestroyedListener;
     }
 
-    protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
+    protected override void Execute(System.Collections.Generic.List<PlayerEntity> entities) {
         foreach (var e in entities) {
             
             _listenerBuffer.Clear();

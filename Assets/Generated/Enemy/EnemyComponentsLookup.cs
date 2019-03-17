@@ -6,7 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public static class GameComponentsLookup {
+public static class EnemyComponentsLookup {
 
 
 

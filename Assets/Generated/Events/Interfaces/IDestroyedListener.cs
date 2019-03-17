@@ -7,5 +7,5 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public interface IDestroyedListener {
-    void OnDestroyed(GameEntity entity);
+    void OnDestroyed(PlayerEntity entity);
 }

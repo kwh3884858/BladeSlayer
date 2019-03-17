@@ -17,7 +17,7 @@
 
 		// Events (Generated)
 		//Add (new InputEventSystems (contexts));
-		Add (new GameEventSystems (contexts));
+		Add (new PlayerEventSystems (contexts));
 		//Add (new GameStateEventSystems (contexts));
 
 		// Cleanup (Generated, only with Entitas Asset Store version)

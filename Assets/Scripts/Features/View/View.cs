@@ -7,7 +7,7 @@ public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener
 	public virtual void Link (IEntity entity)
 	{
 		gameObject.Link (entity);
-		GameEntity e = (GameEntity)entity;
+		PlayerEntity e = (PlayerEntity)entity;
 		e.AddPositionListener (this);
 		e.AddDestroyedListener (this);
 
@@ -15,12 +15,12 @@ public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener
 		transform.localPosition = new Vector3 (pos.x, pos.y);
 	}
 
-	public virtual void OnPosition (GameEntity entity, Vector2Int value)
+	public virtual void OnPosition (PlayerEntity entity, Vector2Int value)
 	{
 		transform.localPosition = new Vector3 (value.x, value.y);
 	}
 
-	public virtual void OnDestroyed (GameEntity entity)
+	public virtual void OnDestroyed (PlayerEntity entity)
 	{
 		destroy ();
 	}

@@ -7,5 +7,5 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public interface IVelocityListener {
-    void OnVelocity(GameEntity entity, UnityEngine.Vector2 value);
+    void OnVelocity(PlayerEntity entity, UnityEngine.Vector2 value);
 }

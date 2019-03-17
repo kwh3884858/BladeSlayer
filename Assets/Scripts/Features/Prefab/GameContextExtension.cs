@@ -3,9 +3,9 @@ using UnityEngine;
 using Entitas;
 public static class GameContextExtension
 {
-	public static GameEntity CreateMainPlayer (this GameContext context, int x, int y)
+	public static PlayerEntity CreateMainPlayer (this PlayerContext context, int x, int y)
 	{
-		GameEntity entity = context.CreateEntity ();
+		PlayerEntity entity = context.CreateEntity ();
 		entity.isMovable = true;
 		entity.AddPosition (new Vector2Int (x, y));
 		entity.AddAsset ("CharacterPlaceholder");
@@ -15,12 +15,12 @@ public static class GameContextExtension
 
 public partial class Contexts
 {
-	public GameEntity m_player;
+	public PlayerEntity m_player;
 
 	//[Entitas.CodeGeneration.Attributes.PostConstructor]
 	//public void InitializePlayerEntity ()
 	//{
-	//	//game.AddEntityIndex(new PrimaryEntityIndex<GameEntity,int>(
+	//	//game.AddEntityIndex(new PrimaryEntityIndex<PlayerEntity,int>(
 	//	//m_entity,
 	//	//game.GetGroup(GameMatcher.AllOf(GameMatcher.Position).NoneOf(GameMatcher.Destroyed)),(entity,comp)=>(comp as )
 
