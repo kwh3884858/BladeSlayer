@@ -111,6 +111,7 @@ namespace Skylight
 			m_allEvent.Add (typeof (T).ToString (), handler as EventHandler<EventArgs>);
 		}
 		public void RemoveEventListener () { }
+
 		public void SendEvent<T> (T message) where T : EventArgs
 		{
 			string eventName = typeof (T).ToString ();

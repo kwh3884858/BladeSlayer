@@ -47,4 +47,21 @@ namespace Skylight
 		}
 	}
 
+	public class ButtonDownEvent : EventArgs
+	{
+		public string m_buttonName { get; set; }
+		public ButtonDownEvent (string buttonName)
+		{
+			m_buttonName = buttonName;
+		}
+	}
+
+	public class ButtonUpEvent : EventArgs
+	{
+		public string m_buttonName { get; set; }
+		public ButtonUpEvent (string buttonName)
+		{
+			m_buttonName = buttonName;
+		}
+	}
 }

@@ -3,20 +3,20 @@ using System.Collections;
 
 namespace Skylight
 {
-	public class DesktopPauseInput : BaseButtonInput
-	{
+	//public class DesktopPauseInput : ButtonInput
+	//{
 
-		public DesktopPauseInput ()
-		{
-			this.m_deviceType = DeviceType.Desktop;
+	//	public DesktopPauseInput ()
+	//	{
+	//		this.m_deviceType = DeviceType.Desktop;
 
-		}
+	//	}
 
-		public override bool Value {
-			get {
+	//	public override bool Value {
+	//		get {
 
-				return Input.GetButton ("Cancel");
-			}
-		}
-	}
+	//			return Input.GetButton ("Cancel");
+	//		}
+	//	}
+	//}
 }

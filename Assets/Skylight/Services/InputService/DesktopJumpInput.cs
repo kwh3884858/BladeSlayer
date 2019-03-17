@@ -4,20 +4,20 @@ using UnityEngine;
 using Skylight;
 namespace Skylight
 {
-	public class DesktopJumpInput : BaseButtonInput
-	{
+	//public class DesktopJumpInput : ButtonInput
+	//{
 
-		public DesktopJumpInput ()
-		{
-			this.m_deviceType = DeviceType.Desktop;
+	//	public DesktopJumpInput ()
+	//	{
+	//		this.m_deviceType = DeviceType.Desktop;
 
-		}
+	//	}
 
-		public override bool Value {
-			get {
+	//	public override bool Value {
+	//		get {
 
-				return Input.GetButtonDown ("Jump");
-			}
-		}
-	}
+	//			return Input.GetButtonDown ("Jump");
+	//		}
+	//	}
+	//}
 }

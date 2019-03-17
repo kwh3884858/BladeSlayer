@@ -39,6 +39,9 @@ namespace Skylight
 			//SceneManager.Instance ().ShowScene<SceneCave> ();
 			//UIManager.Instance ().ShowPanel<UIMainMenu> ();
 			//UIManager.Instance().ShowPanel<UIMainMenuPanel>();
+
+			AddEntitas ();
+
 			StartCoroutine (AfterInitialize ());
 		}
 		IEnumerator AfterInitialize ()
@@ -60,7 +63,14 @@ namespace Skylight
 
 
 		}
+		private void AddEntitas ()
+		{
+			GameObject entitas = new GameObject ("Entitas.GameControllerBehaviour");
+			entitas.transform.parent = transform;
 
+			entitas.AddComponent<GameControllerBehaviour> ();
+
+		}
 
 	}
 }

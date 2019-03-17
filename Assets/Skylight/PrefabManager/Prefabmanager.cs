@@ -1,50 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Skylight;
-public class PrefabManager : GameModule<PrefabManager> {
+namespace Skylight
+{
+	public class PrefabManager : GameModule<PrefabManager>
+	{
 
-    Dictionary<string, GameObject> mAllScenes = new Dictionary<string, GameObject>();
+		Dictionary<string, GameObject> m_allPrefab = new Dictionary<string, GameObject> ();
 
-    public GameObject LoadPrefab(string prefabName)
-    {
-        string name = "Prefabs/" + prefabName;
-        if (mAllScenes.ContainsKey(prefabName))
-        {
-            return mAllScenes[prefabName];
-        }
-        else
-        {
-            GameObject perfb = AssetsManager.LoadPrefab<GameObject>(name);
-            if (perfb == null)
-            {
-                Debug.Log(prefabName + "can`t find in Prefabs/" + prefabName);
-                return null;
-            }
-            mAllScenes.Add(prefabName, perfb);
-            return perfb;
-        }
+		public GameObject LoadPrefab (string prefabName)
+		{
+			string name = "Prefabs/" + prefabName;
+			if (m_allPrefab.ContainsKey (prefabName)) {
+				return m_allPrefab [prefabName];
+			} else {
+				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (name);
+				if (perfb == null) {
+					Debug.Log (prefabName + "can`t find in Prefabs/" + prefabName);
+					return null;
+				}
+				m_allPrefab.Add (prefabName, perfb);
+				return perfb;
+			}
 
 
-        
-    }
 
-    public void UploadPrefab(string name)
-    {
+		}
 
-    }
+		public void UploadPrefab (string name)
+		{
+			GameObject temp = m_allPrefab [name];
+			m_allPrefab.Remove (name);
+			Destroy (temp);
+		}
 
-    public void UploadAllPrefab()
-    {
+		public void UploadAllPrefab ()
+		{
 
-        Dictionary<string, GameObject>.Enumerator etor = mAllScenes.GetEnumerator();
-        while (etor.MoveNext())
-        {
+			Dictionary<string, GameObject>.Enumerator etor = m_allPrefab.GetEnumerator ();
+			while (etor.MoveNext ()) {
 
-            Destroy(etor.Current.Value);
+				Destroy (etor.Current.Value);
 
-        }
-        mAllScenes.Clear();
+			}
+			m_allPrefab.Clear ();
 
-    }
+		}
+	}
 }

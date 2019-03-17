@@ -349,7 +349,7 @@ namespace Skylight
 		{
 			float time = 0;
 
-			SpriteRenderer spriteRender = tran.GetComponent<SpriteRenderer> ();
+			//SpriteRenderer spriteRender = tran.GetComponent<SpriteRenderer> ();
 			//Vector3 tranPos = tran.position;
 			while (true) {
 				yield return new WaitForSeconds (0.03f);

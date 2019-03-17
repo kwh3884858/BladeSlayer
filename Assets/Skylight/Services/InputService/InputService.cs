@@ -8,8 +8,17 @@ namespace Skylight
 	public enum InputType
 	{
 		UnKnown,
-		Vector3,
+		Axis,
 		Button,
+
+	}
+
+	public enum KeyMap
+	{
+		A = KeyCode.A,
+		D = KeyCode.D,
+		Horizontal,
+		Vertical
 
 	}
 
@@ -67,7 +76,40 @@ namespace Skylight
 		/// 这是环境栈，所有的场景，UI在定义时候，都会有一个对应的环境栈
 		/// 注册之前，需要往其中压入对应的栈
 		/// </summary>
-		private Stack<Environment> m_envStack = new Stack<Environment> ();
+		static private Stack<Environment> m_envStack = new Stack<Environment> ();
+
+		static private Dictionary<KeyMap, BaseInput> m_inputs = new Dictionary<KeyMap, BaseInput> ();
+
+		//InputService ()
+		//{
+
+
+		//}
+
+		void HandleButtonUpEvent (object sender, ButtonUpEvent e)
+		{
+			switch (e.m_buttonName) {
+			case "A":
+			case "a":
+				SetInput (KeyMap.A, false);
+				break;
+
+			}
+		}
+
+		void HandleButtonDownEvent (object sender, ButtonDownEvent e)
+		{
+			//KeyMap a = KeyMap.A.name();
+
+			switch (e.m_buttonName) {
+			case "A":
+			case "a":
+				SetInput (KeyMap.A, true);
+
+				break;
+
+			}
+		}
 
 
 		public InputControl Input {
@@ -75,6 +117,26 @@ namespace Skylight
 				return m_inputControl;
 			}
 		}
+
+		public void SetInput (KeyMap map, bool isPress)
+		{
+			(m_inputs [map] as ButtonInput).Value = isPress;
+		}
+		public bool GetInput (KeyMap map)
+		{
+			return (m_inputs [map] as ButtonInput).Value;
+		}
+
+		public void SetAxis (KeyMap map, float value)
+		{
+			(m_inputs [map] as AxisInput).Value = value;
+		}
+		public float GetAxis (KeyMap map)
+		{
+			return (m_inputs [map] as AxisInput).Value;
+
+		}
+
 		/// <summary>
 		/// Gets the input.
 		/// 获取一个输入
@@ -165,6 +227,16 @@ namespace Skylight
 			m_inputControl = new InputControl ();
 			//初始化的时候会把电脑端的操作开启，并且没有提供特别的对应桌面的输入关闭
 			m_inputControl.Init ();
+
+			//m_inputs.Add (KeyMap.A, new ButtonInput (KeyCode.A.ToString ()));
+			//m_inputs.Add (KeyMap.D, new ButtonInput (KeyCode.D.ToString ()));
+			m_inputs.Add (KeyMap.Horizontal, new AxisInput (KeyMap.Horizontal.ToString ()));
+			m_inputs.Add (KeyMap.Vertical, new AxisInput (KeyMap.Vertical.ToString ()));
+
+			EventManager.Instance ().AddEventListener<ButtonDownEvent> (HandleButtonDownEvent);
+			EventManager.Instance ().AddEventListener<ButtonUpEvent> (HandleButtonUpEvent);
+
+
 		}
 
 

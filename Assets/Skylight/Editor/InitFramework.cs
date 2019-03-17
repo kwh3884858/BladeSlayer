@@ -53,6 +53,7 @@ namespace Skylight
 				"Scripts/UI/Box",
 				"Scripts/Logic",
 				"Scripts/Scenes",
+				"Sources",				//保存生成代码，以及不需要手动编写的代码
 				"Tools",				//工具
 			};
 
