@@ -5,10 +5,9 @@
 通过链接，你可以查看，并且修改文档（求不瞎改）
 
 
-
-- Concept Design概念设计:
-
-https://docs.qq.com/doc/DWXlKeVRRUkNEWUxh
+- TDD(Tech Design Document)技术设计文档
+https://docs.qq.com/doc/DWXFJWVR2a3NWTVl3
+如果您对于Entity和系统架构并不熟悉，请先阅读这份文档。
 
 
 
@@ -21,6 +20,14 @@ https://docs.qq.com/doc/DWW9FdEZDd1ViQXRV
 - ADD(Art Design Document)艺术设计文档:
 
 https://docs.qq.com/doc/DWWdLc0Vya3hWZnZI
+
+
+
+- Concept Design概念设计:
+
+https://docs.qq.com/doc/DWXlKeVRRUkNEWUxh
+
+
 
 
 
