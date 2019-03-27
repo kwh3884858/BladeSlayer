@@ -8,37 +8,43 @@
 //------------------------------------------------------------------------------
 public static class PlayerComponentsLookup {
 
-    public const int Asset = 0;
-    public const int Destroyed = 1;
-    public const int DestroyedListener = 2;
-    public const int Movable = 3;
-    public const int Position = 4;
-    public const int PositionListener = 5;
-    public const int Velocity = 6;
-    public const int VelocityListener = 7;
-    public const int View = 8;
+    public const int Ability = 0;
+    public const int Asset = 1;
+    public const int Destroyed = 2;
+    public const int DestroyedListener = 3;
+    public const int Movable = 4;
+    public const int Position = 5;
+    public const int PositionListener = 6;
+    public const int Property = 7;
+    public const int Velocity = 8;
+    public const int VelocityListener = 9;
+    public const int View = 10;
 
-    public const int TotalComponents = 9;
+    public const int TotalComponents = 11;
 
     public static readonly string[] componentNames = {
+        "Ability",
         "Asset",
         "Destroyed",
         "DestroyedListener",
         "Movable",
         "Position",
         "PositionListener",
+        "Property",
         "Velocity",
         "VelocityListener",
         "View"
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(AbilityComponent),
         typeof(AssetComponent),
         typeof(DestroyedComponent),
         typeof(DestroyedListenerComponent),
         typeof(MovableComponent),
         typeof(PositionComponent),
         typeof(PositionListenerComponent),
+        typeof(PropertyComponent),
         typeof(VelocityComponent),
         typeof(VelocityListenerComponent),
         typeof(ViewComponent)

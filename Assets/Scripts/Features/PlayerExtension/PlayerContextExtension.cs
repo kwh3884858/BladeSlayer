@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Entitas;
-public static class GameContextExtension
+public static class PlayerContextExtension
 {
 	public static PlayerEntity CreateMainPlayer (this PlayerContext context, int x, int y)
 	{
