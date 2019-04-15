@@ -44,7 +44,7 @@ namespace Skylight
 
 			AddEntitas ();
 
-			SceneManager.Instance ().AddSceneLoadedEvent (Handlecallback);
+			//SceneManager.Instance ().AddSceneLoadedEvent (Handlecallback);
 
 
 			StartCoroutine (AfterInitialize ());
@@ -52,8 +52,8 @@ namespace Skylight
 		IEnumerator AfterInitialize ()
 		{
 			yield return null;
-			SceneManager.Instance ().LoadScene ("Scene1", SceneLoadMode.Additive);
-			SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
+			SceneManager.Instance ().LoadScene ("Workspace_Level_One", SceneLoadMode.Additive);
+			//SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
 
 
 
@@ -61,10 +61,10 @@ namespace Skylight
 		// Update is called once per frame
 		void Update ()
 		{
-			if (virtualMachineInterface != null) {
-				virtualMachineInterface.Update ();
+			//if (virtualMachineInterface != null) {
+			//	virtualMachineInterface.Update ();
 
-			}
+			//}
 		}
 
 		void Handlecallback ()

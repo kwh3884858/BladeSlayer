@@ -228,7 +228,9 @@ namespace Skylight
 		/// </summary>
 		static public AssetBundleLoadManifestOperation Initialize ()
 		{
+#if UNITY_EDITOR
 			SimulateAssetBundleInEditor = false;
+#endif
 			return Initialize (AssetsUtility.GetPlatformName ());
 		}
 
