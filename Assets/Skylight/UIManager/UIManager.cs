@@ -100,12 +100,12 @@ namespace Skylight
 		/// 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="text">��ʾ����Ļ�ϵ�����</param>
-		/// <param name="rectPos">��ʾ����Ļ�ϵ�λ��,���½��ǣ�0,0)</param>
-		/// <param name="offset">UI����Ļ�ϵ�ƫ�ƣ�UI��λ�ûᱻ������(x-offseX,y-offsetY)֮��</param>
-		/// <param name="WaitingTime">�ȴ���ʧ��ʱ��</param>
-		/// <param name="isAutoFade">�Ƿ���Ҫ�Զ���ʧ��false���Զ����εȴ�ʱ��</param>
-		/// <param name="varList">�����б�</param>
+		/// <param name="text">显示在屏幕上的文字</param>
+		/// <param name="rectPos">显示在屏幕上的位置,左下角是（0,0)</param>
+		/// <param name="offset">UI在屏幕上的偏移，UI的位置会被限制在(x-offseX,y-offsetY)之中</param>
+		/// <param name="WaitingTime">等待消失的时间</param>
+		/// <param name="isAutoFade">是否需要自动消失，false会自动屏蔽等待时间</param>
+		/// <param name="varList">变量列表</param>
 		/// <returns></returns>
 		public T ShowOverlay<T> (string text,
 								 Vector3 rectPos = default (Vector3),
@@ -185,12 +185,12 @@ namespace Skylight
 		/// <summary>
 		/// Shows the panel.
 		/// 
-		/// ��ʾһ��panel��panel����Ϊ�򵥵�UIԪ�أ�ֻ�ǵ�����ʾ�ڻ����У�
-		/// ���еĴ���������Panel��������������ڸ���Ƶ����UI�л����в�Ҫʹ��panel
-		/// ���߰�һϵ��Panel����һ����������ͳһ��������
+		/// 显示一个panel，panel是最为简单的UI元素，只是单纯显示在画面中，
+		/// 所有的处理都交给Panel本身解决，建议在复杂频繁的UI切换中中不要使用panel
+		/// 或者把一系列Panel置于一个父对象上统一管理开关
 		/// </summary>
 		/// <returns>The panel.</returns>
-		/// <param name="isFramework">���UI�Ƿ�Ϊ���ʹ�õġ���Ϊ<c>true</c>�����ڿ�ܼ���UIԤ�衣ͨ������false��</param>
+		/// <param name="isFramework">这个UI是否为框架使用的。设为<c>true</c>是用于框架级的UI预设。通常都是false。</param>
 		/// <param name="varList">Variable list.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T ShowPanel<T> (bool isFramework = false, Dictionary<string, object> varList = null) where T : UIPanel

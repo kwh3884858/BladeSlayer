@@ -6,6 +6,8 @@ namespace Skylight
 {
 	public class GameRoot : MonoSingleton<GameRoot>
 	{
+		VirtualMachineInterface virtualMachineInterface;
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -42,6 +44,9 @@ namespace Skylight
 
 			AddEntitas ();
 
+			SceneManager.Instance ().AddSceneLoadedEvent (Handlecallback);
+
+
 			StartCoroutine (AfterInitialize ());
 		}
 		IEnumerator AfterInitialize ()
@@ -50,11 +55,23 @@ namespace Skylight
 			SceneManager.Instance ().LoadScene ("Scene1", SceneLoadMode.Additive);
 			SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
 
+
+
 		}
 		// Update is called once per frame
 		void Update ()
 		{
+			if (virtualMachineInterface != null) {
+				virtualMachineInterface.Update ();
 
+			}
+		}
+
+		void Handlecallback ()
+		{
+			virtualMachineInterface = new VirtualMachineInterface ();
+			virtualMachineInterface.Start ();
+			//SceneManager.Instance ().RemoveSceneLoadedEvent (Handlecallback);
 		}
 
 
@@ -71,6 +88,7 @@ namespace Skylight
 			entitas.AddComponent<GameControllerBehaviour> ();
 
 		}
+
 
 	}
 }

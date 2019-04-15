@@ -7,6 +7,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
+//depend on EventManager
 namespace Skylight
 {
 	public enum SceneLoadMode
@@ -23,8 +24,18 @@ namespace Skylight
 		//AsyncOperation asyncOperation = new AsyncOperation ();
 
 		List<string> m_loadedScene = new List<string> ();
+
+		public delegate void callback ();
+		List<callback> m_loadedSceneEvent = new List<callback> ();
+
 		public UnityEngine.SceneManagement.Scene m_currentScene {
 			get; set;
+		}
+
+		public override void SingletonInit ()
+		{
+			base.SingletonInit ();
+			EventManager.Instance ().AddEventListener<SceneLoadedEvent> (SceneLoadedCallBack);
 		}
 
 		public void LoadScene (string sceneName, SceneLoadMode loadMode, object sceneData = null)
@@ -76,6 +87,7 @@ namespace Skylight
 		}
 
 
+
 		public void UploadScene<T> (object sceneData = null)
 		{
 
@@ -122,6 +134,27 @@ namespace Skylight
 			//m_currentScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName (sceneName);
 			//UnityEngine.SceneManagement.SceneManager.SetActiveScene (m_currentScene);
 			return go;
+		}
+
+		public void AddSceneLoadedEvent (callback func)
+		{
+			m_loadedSceneEvent.Add (func);
+		}
+
+		public void RemoveSceneLoadedEvent (callback func)
+		{
+			m_loadedSceneEvent.Remove (func);
+		}
+
+		public void SceneLoadedCallBack (object sender, SceneLoadedEvent showSceneEvent)
+		{
+			if (m_loadedSceneEvent != null) {
+				foreach (callback call in m_loadedSceneEvent) {
+					call?.Invoke ();
+				}
+
+				m_loadedSceneEvent.Clear ();
+			}
 		}
 		/*
 		public void ReloadScene<T> () where T : BaseScene

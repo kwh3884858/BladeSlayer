@@ -88,13 +88,13 @@ namespace Skylight
 		}
 
 		/// <summary>
-		/// ²¥·ÅÒôĞ§
+		/// æ’­æ”¾éŸ³æ•ˆ
 		/// </summary>
 		public void PlayEffect (string name, bool isLoop = false, float volume = 0.5f, bool isCover = false)
 		{
 			string _name = name;
 			if (isCover) {
-				//ÔÊĞíÖØ¸´²¥·Å
+				//å…è®¸é‡å¤æ’­æ”¾
 				while (true) {
 					name += UnityEngine.Random.Range (0, 9999).ToString ();
 					if (effectsounCache.ContainsKey (name)) {
@@ -105,7 +105,7 @@ namespace Skylight
 				}
 			} else {
 				if (effectsounCache.ContainsKey (name)) {
-					//¶Å¾øÖØ¸´²¥·Å
+					//æœç»é‡å¤æ’­æ”¾
 					return;
 				}
 			}
@@ -161,14 +161,14 @@ namespace Skylight
 		//}, clearTime));
 		//}
 		/// <summary>
-		/// ²¥·ÅÒôĞ§
+		/// æ’­æ”¾éŸ³æ•ˆ
 		/// </summary>
-		/// <param name="name">Æ¬¶ÎÃû.</param>
-		/// <param name="isLoop">ÊÇ·ñÖØ¸´.</param>
+		/// <param name="name">ç‰‡æ®µå.</param>
+		/// <param name="isLoop">æ˜¯å¦é‡å¤.</param>
 		//public void PlayEffect (string name, bool isLoop)
 		//{
 		//	if (effectsounCache.ContainsKey (name)) {
-		//		//¶Å¾øÖØ¸´²¥·Å
+		//		//æœç»é‡å¤æ’­æ”¾
 		//		return;
 		//	}
 
@@ -191,7 +191,7 @@ namespace Skylight
 		public void StopEffect (string name)
 		{
 			if (effectsounCache.ContainsKey (name)) {
-				//¶Å¾øÖØ¸´²¥·Å
+				//æœç»é‡å¤æ’­æ”¾
 				GameObject.Destroy (effectsounCache [name].gameObject);
 				effectsounCache.Remove (name);
 

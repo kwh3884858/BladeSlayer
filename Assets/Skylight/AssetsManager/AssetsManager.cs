@@ -230,12 +230,16 @@ namespace Skylight
 		}
 		private void OnAssetBundleDownloaded (AssetBundle bundle)
 		{
+			string bundleName;
+			bundleName = bundle.name;
 			if (bundle != null) {
 				// Do something with the bundle
 				abm.UnloadBundle (bundle);
 			}
 
 			abm.Dispose ();
+
+			EventManager.Instance ().SendEvent<SceneLoadedEvent> (new SceneLoadedEvent ());
 		}
 
 		IEnumerator InitializeLevelAsync (string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode)
