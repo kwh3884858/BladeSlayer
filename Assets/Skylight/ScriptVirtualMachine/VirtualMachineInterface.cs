@@ -4,10 +4,16 @@ using UnityEngine;
 using System;
 namespace Skylight
 {
-	public class NewBehaviourScript
+	public class VirtualMachineInterface
 	{
 
 		ScriptVirtualMachine scriptVirtualMachine;
+
+		public VirtualMachineInterface ()
+		{
+			scriptVirtualMachine = new ScriptVirtualMachine ();
+		}
+
 		// ---- Host API ------------------------------------------------------------------------------
 
 		/******************************************************************************************
@@ -38,14 +44,14 @@ namespace Skylight
 
 		// ---- Main ----------------------------------------------------------------------------------
 
-		int Start ()
+		public int Start ()
 		{
 			// Print the logo
 
 			Debug.Log ("XVM Final\n");
 			Debug.Log ("XtremeScript Virtual Machine\n");
 			Debug.Log ("Written by Alex Varanese\n");
-			Debug.Log ("\n");
+			Debug.Log ("---------------------------");
 
 			// Initialize the runtime environment
 
@@ -129,14 +135,28 @@ namespace Skylight
 
 			scriptVirtualMachine.XS_InvokeScriptFunc (iThreadIndex, "InvokeLoop");
 
-			while (InputService.Instance ().GetInput (KeyMap.A))
-				scriptVirtualMachine.XS_RunScripts (50);
+			//EventManager.Instance ().AddEventListener<ButtonDownEvent> ((sender, e) => );
+
+
+			//while (InputService.Instance ().GetInput (KeyMap.A))
+			//;
 
 			// Free resources and perform general cleanup
 
-			scriptVirtualMachine.XS_ShutDown ();
+
 
 			return 0;
+		}
+
+		public void Update ()
+		{
+			if (scriptVirtualMachine == null) return;
+			if (InputService.Instance ().GetAxis (KeyMap.Horizontal) >= 0.9f) {
+				scriptVirtualMachine.XS_ShutDown ();
+				scriptVirtualMachine = null;
+			} else {
+				scriptVirtualMachine.XS_RunScripts (50);
+			}
 		}
 
 	}

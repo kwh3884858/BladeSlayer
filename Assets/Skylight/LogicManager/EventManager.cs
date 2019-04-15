@@ -36,6 +36,12 @@ namespace Skylight
 	public class EventManager : GameModule<EventManager>
 	{
 		LogicBase m_currentLogic;
+		private Dictionary<Type, Delegate> m_allEvent =
+new Dictionary<Type, Delegate> ();
+
+		//事件委托.
+		//public delegate void EventDelegate<T> (T e) where T : EventArgs;
+
 
 		public override void SingletonInit ()
 		{
@@ -103,21 +109,46 @@ namespace Skylight
 		}
 
 		//new one
-		public Dictionary<string, EventHandler<EventArgs>> m_allEvent =
-		new Dictionary<string, EventHandler<EventArgs>> ();
+
 
 		public void AddEventListener<T> (EventHandler<T> handler) where T : EventArgs
 		{
-			m_allEvent.Add (typeof (T).ToString (), handler as EventHandler<EventArgs>);
+			Delegate d;
+			if (m_allEvent.TryGetValue (typeof (T), out d)) {
+				m_allEvent [typeof (T)] = Delegate.Combine (d, handler);
+			} else {
+				m_allEvent [typeof (T)] = handler;
+			}
+
 		}
-		public void RemoveEventListener () { }
+		public void RemoveEventListener<T> (EventHandler<T> handler) where T : EventArgs
+		{
+
+			Delegate d;
+			if (m_allEvent.TryGetValue (typeof (T), out d)) {
+				Delegate currentDel = Delegate.Remove (d, handler);
+
+				if (currentDel == null) {
+					m_allEvent.Remove (typeof (T));
+				} else {
+					m_allEvent [typeof (T)] = currentDel;
+				}
+			}
+
+		}
 
 		public void SendEvent<T> (T message) where T : EventArgs
 		{
-			string eventName = typeof (T).ToString ();
-			if (!m_allEvent.ContainsKey (eventName)) { return; };
-			EventHandler<T> temp = m_allEvent [eventName] as EventHandler<T>;
-			if (temp != null) temp (this, message);
+
+			if (message == null) {
+				throw new ArgumentNullException ("e");
+			}
+
+			Delegate d;
+			if (m_allEvent.TryGetValue (typeof (T), out d)) {
+				(d as EventHandler<T>)?.Invoke (this, message);
+			}
+
 		}
 	}
 

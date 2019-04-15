@@ -87,9 +87,9 @@ namespace Skylight
 
 		private const string XSE_ID_STRING = "XSE0";      // Used to validate an .XSE executable
 
-		private const Int32 MAX_THREAD_COUNT = 1024;    // The maximum number of scripts that
-														// can be loaded at once. Change this
-														// to support more or less.
+		private const Int32 MAX_THREAD_COUNT = 8;    // The maximum number of scripts that
+													 // can be loaded at once. Change this
+													 // to support more or less.
 
 		// ---- Operand/Value Types ---------------------------------------------------------------
 
@@ -179,43 +179,57 @@ namespace Skylight
 		// ---- Data Structures -----------------------------------------------------------------------
 
 		// ---- Runtime Value ---------------------------------------------------------------------
-		[StructLayout (LayoutKind.Explicit)]
+		//[StructLayout (LayoutKind.Explicit, CharSet = CharSet.Ansi, Size = 16)]
+		[Serializable]
 		class Value                           // A runtime value
 		{
 
-			[FieldOffset (0)]
+			//[FieldOffset (0)]
 			public Int32 iType;                                  // Type
 
-			[FieldOffset (4)]
-			public Int32 iIntLiteral;                        // Int32eger literal
-			[FieldOffset (4)]
-			public float fFloatLiteral;                    // Float literal
+			//[FieldOffset (4)]
+			public Int32 iIntValue;                        // Int32eger literal
 														   //[FieldOffset (4)]
-														   //public unsafe Byte* pstrStringLiteral;              
-			[FieldOffset (4)]
-			public Int32 iStackIndex;                        // Stack Index
-			[FieldOffset (4)]
-			public Int32 iInstrIndex;                        // Instruction index
-			[FieldOffset (4)]
-			public Int32 iFuncIndex;                         // Function index
-			[FieldOffset (4)]
-			public Int32 iHostAPICallIndex;                  // Host API Call index
-			[FieldOffset (4)]
-			public Int32 iReg;                               // Register code
+			public float fFloatLiteral;                    // Float literal										         
 
-			[FieldOffset (8)]
+			////[FieldOffset (4)]
+			//public Int32 iIntValue;                        // Stack Index
+			//												 //[FieldOffset (4)]
+			//public Int32 iIntValue;                        // Instruction index
+			//												 //[FieldOffset (4)]
+			//public Int32 iIntValue;                         // Function index
+			//[FieldOffset (4)]
+			public Int32 iHostAPICallIndex;                  // Host API Call index
+															 //[FieldOffset (4)]
+															 //public Int32 iIntValue;                               // Register code
+
+			//[FieldOffset (8)]
 			public Int32 iOffsetIndex;                           // Index of the offset
 
-			[FieldOffset (12)]
+			//[FieldOffset (12)]
+			//[MarshalAs (UnmanagedType.LPStr)]
 			public string pstrStringLiteral;             // String literal
+
+			public void SetValue (ref Value value)
+			{
+				this.iType = value.iType;
+				this.iIntValue = value.iIntValue;
+				this.fFloatLiteral = value.fFloatLiteral;
+				//this.iIntValue = value.iIntValue;
+				//this.iIntValue = value.iIntValue;
+				//this.iIntValue = value.iIntValue;
+				this.iHostAPICallIndex = value.iHostAPICallIndex;
+				//this.iIntValue = value.iIntValue;
+				this.iOffsetIndex = value.iOffsetIndex;
+			}
 		}
 
 		// ---- Runtime Stack ---------------------------------------------------------------------
 		//[StructLayout (LayoutKind.Sequential)]
-		class RuntimeStack                    // A runtime stack
+		struct RuntimeStack                    // A runtime stack
 		{
 
-			public List<Value> pElmnts;                         // The stack elements of Value
+			public Value [] pElmnts;                         // The stack elements of Value
 			public Int32 iSize;                                  // The number of elements in the stack
 
 			public Int32 iTopIndex;                              // The top index
@@ -226,7 +240,7 @@ namespace Skylight
 		// ---- Functions -------------------------------------------------------------------------
 		//[StructLayout (LayoutKind.Sequential)]
 
-		class Func                            // A function
+		struct Func                            // A function
 		{
 			public Int32 iEntryPoint;                            // The entry poInt32
 			public Int32 iParamCount;                            // The parameter count
@@ -239,17 +253,17 @@ namespace Skylight
 
 		// ---- Instructions ----------------------------------------------------------------------
 		//[StructLayout (LayoutKind.Sequential)]
-		class Instr                           // An instruction
+		struct Instr                           // An instruction
 		{
 			public Int32 iOpcode;                                // The opcode
 			public Int32 iOpCount;                               // The number of operands
-			public List<Value> pOpList;                            // The operand list of Values
+			public Value [] pOpList;                            // The operand list of Values
 		}
 
 		//[StructLayout (LayoutKind.Sequential)]
-		class InstrStream                     // An instruction stream
+		struct InstrStream                     // An instruction stream
 		{
-			public List<Instr> pInstrs;                         // The instructions themselves
+			public Instr [] pInstrs;                         // The instructions themselves
 			public Int32 iSize;                                  // The number of instructions in the
 																 // stream
 			public Int32 iCurrInstr;                             // The instruction poInt32er
@@ -258,18 +272,18 @@ namespace Skylight
 
 		// ---- Function Table --------------------------------------------------------------------
 		//[StructLayout (LayoutKind.Sequential)]
-		class FuncTable                       // A function table
+		struct FuncTable                       // A function table
 		{
-			public List<Func> pFuncs;                              // PoInt32er to the function array
+			public Func [] pFuncs;                              // PoInt32er to the function array
 			public Int32 iSize;                                  // The number of functions in the array
 		}
 		//FuncTable;
 
 		// ---- Host API Call Table ---------------------------------------------------------------
 		//[StructLayout (LayoutKind.Sequential)]
-		class HostAPICallTable                // A host API call table
+		struct HostAPICallTable                // A host API call table
 		{
-			public List<string> ppstrCalls;                          // PoInt32er to the call array
+			public string [] ppstrCalls;                          // PoInt32er to the call array
 			public Int32 iSize;                                  // The number of calls in the array
 		}
 		//HostAPICallTable;
@@ -283,13 +297,13 @@ namespace Skylight
 			// Header data
 
 			public Int32 iGlobalDataSize;                        // The size of the script's global data
-			public bool iIsMainFuncPresent;                     // Is _Main () present?
+			public bool iIsMainFuncPresent;                      // Is _Main () present?
 			public Int32 iMainFuncIndex;                         // _Main ()'s function index
 
 			// Runtime tracking
 
-			public bool iIsRunning;                             // Is the script running?
-			public bool iIsPaused;                              // Is the script currently paused?
+			public bool iIsRunning;                              // Is the script running?
+			public bool iIsPaused;                               // Is the script currently paused?
 			public Int32 iPauseEndTime;                          // If so, when should it resume?
 
 			// Threading
@@ -306,6 +320,8 @@ namespace Skylight
 			public RuntimeStack Stack;                         // The runtime stack
 			public FuncTable FuncTable;                        // The function table
 			public HostAPICallTable HostAPICallTable;          // The host API call table
+
+
 		}
 		//Script;
 
@@ -388,6 +404,7 @@ namespace Skylight
 				g_Scripts [iCurrScriptIndex].iIsMainFuncPresent = false;
 				g_Scripts [iCurrScriptIndex].iIsPaused = false;
 
+
 				g_Scripts [iCurrScriptIndex].InstrStream.pInstrs = null;
 				g_Scripts [iCurrScriptIndex].Stack.pElmnts = null;
 				g_Scripts [iCurrScriptIndex].FuncTable.pFuncs = null;
@@ -436,10 +453,11 @@ namespace Skylight
 		/// <param name="size">Size.</param>
 		void ReadStringFromFileStream (BinaryReader stream, ref string dest, int size = 4)
 		{
-			Byte [] stackSize = new Byte [size + 1];
+			Byte [] stackSize = new Byte [size];
 			stream.Read (stackSize, 0, size);
-			stackSize [size] = (Byte)'\0';
-			dest = System.Text.Encoding.ASCII.GetString (stackSize);
+			//stackSize [size] = (Byte)'\0';
+			//dest = System.Text.Encoding.ASCII.GetString (stackSize);
+			dest = System.Text.Encoding.UTF8.GetString (stackSize);
 		}
 
 		/// <summary>
@@ -450,7 +468,7 @@ namespace Skylight
 		/// <param name="size">Size.</param>
 		void ReadIntFromFileStream (BinaryReader stream, ref int dest, int size = sizeof (Int32))
 		{
-			Byte [] stackSize = new Byte [size];
+			Byte [] stackSize = new Byte [4];
 			stream.Read (stackSize, 0, size);
 			dest = BitConverter.ToInt32 (stackSize, 0);
 		}
@@ -463,7 +481,7 @@ namespace Skylight
 		/// <param name="size">Size.</param>
 		void ReadFloatFromFileStream (BinaryReader stream, ref float dest, int size = sizeof (Single))
 		{
-			Byte [] stackSize = new Byte [size];
+			Byte [] stackSize = new Byte [4];
 			stream.Read (stackSize, 0, size);
 			dest = BitConverter.ToSingle (stackSize, 0);
 		}
@@ -556,431 +574,436 @@ namespace Skylight
 
 			// ---- Open the input file
 
-			using (BinaryReader pScriptFile = new BinaryReader (stream)) {
-				if (pScriptFile == null)
-					return XS_LOAD_ERROR_FILE_IO;
+			BinaryReader pScriptFile = new BinaryReader (stream);
+			if (pScriptFile == null)
+				return XS_LOAD_ERROR_FILE_IO;
 
-				// ---- Read the header
+			// ---- Read the header
 
-				// Create a buffer to hold the file's ID string (4 bytes + 1 null terminator = 5)
+			// Create a buffer to hold the file's ID string (4 bytes + 1 null terminator = 5)
 
-				Byte [] pstrIDString = new Byte [5];
-				if (pstrIDString == null)
+			Byte [] pstrIDString = new Byte [5];
+			if (pstrIDString == null)
+				return XS_LOAD_ERROR_OUT_OF_MEMORY;
+
+			// Read the string (4 bytes) and append a null terminator
+
+			string exeIdString = "";
+			ReadStringFromFileStream (pScriptFile, ref exeIdString, 4);
+
+
+			// Compare the data read from the file to the ID string and exit on an error if they don't
+			// match
+			// ignore culture case for a better speed of compare
+
+			if (string.Compare (XSE_ID_STRING, exeIdString, StringComparison.Ordinal) != 0)
+				return XS_LOAD_ERROR_INVALID_XSE;
+
+			// Free the buffer
+
+			//free (pstrIDString);
+
+
+
+			// Read the script version (2 bytes total)
+
+			int iMajorVersion = 0;
+			int iMinorVersion = 0;
+
+			iMajorVersion = pScriptFile.ReadByte ();
+			iMinorVersion = pScriptFile.ReadByte ();
+
+			// Validate the version, since this prototype only supports version 0.8 scripts
+
+			if (iMajorVersion != 0 || iMinorVersion != 8)
+				return XS_LOAD_ERROR_UNSUPPORTED_VERS;
+
+			// Read the stack size (4 bytes)
+
+			ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].Stack.iSize);
+
+			// Check for a default stack size request
+
+			if (g_Scripts [iThreadIndex].Stack.iSize == 0)
+				g_Scripts [iThreadIndex].Stack.iSize = DEF_STACK_SIZE;
+
+			// Allocate the runtime stack
+
+			int iStackSize = g_Scripts [iThreadIndex].Stack.iSize;
+			g_Scripts [iThreadIndex].Stack.pElmnts = new Value [iStackSize];
+			for (int i = 0; i < iStackSize; i++) g_Scripts [iThreadIndex].Stack.pElmnts [i] = new Value ();
+
+			if (g_Scripts [iThreadIndex].Stack.pElmnts == null)
+				return XS_LOAD_ERROR_OUT_OF_MEMORY;
+
+			// Read the global data size (4 bytes)
+
+			ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iGlobalDataSize);
+
+			// Check for presence of _Main () (1 byte)
+
+			ReadBoolFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iIsMainFuncPresent);
+
+			// Read _Main ()'s function index (4 bytes)
+
+			ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iMainFuncIndex);
+
+
+			// Read the priority type (1 byte)
+
+			int iPriorityType = 0;
+			iPriorityType = pScriptFile.ReadByte ();
+
+			// Read the user-defined priority (4 bytes)
+
+			ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iTimesliceDur);
+
+
+			// Override the script-specified priority if necessary
+
+			if (iThreadTimeslice != XS_THREAD_PRIORITY_USER)
+				iPriorityType = iThreadTimeslice;
+
+			// If the priority type is not set to user-defined, fill in the appropriate timeslice
+			// duration
+
+			switch (iPriorityType) {
+			case XS_THREAD_PRIORITY_LOW:
+				g_Scripts [iThreadIndex].iTimesliceDur = THREAD_PRIORITY_DUR_LOW;
+				break;
+
+			case XS_THREAD_PRIORITY_MED:
+				g_Scripts [iThreadIndex].iTimesliceDur = THREAD_PRIORITY_DUR_MED;
+				break;
+
+			case XS_THREAD_PRIORITY_HIGH:
+				g_Scripts [iThreadIndex].iTimesliceDur = THREAD_PRIORITY_DUR_HIGH;
+				break;
+			}
+
+			// ---- Read the instruction stream
+
+			// Read the instruction count (4 bytes)
+
+			ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].InstrStream.iSize);
+
+
+
+
+			// Allocate the stream
+
+			g_Scripts [iThreadIndex].InstrStream.pInstrs = new Instr [g_Scripts [iThreadIndex].InstrStream.iSize];
+
+			if (g_Scripts [iThreadIndex].InstrStream.pInstrs == null)
+				return XS_LOAD_ERROR_OUT_OF_MEMORY;
+
+			// Read the instruction data
+
+			for (int iCurrInstrIndex = 0; iCurrInstrIndex < g_Scripts [iThreadIndex].InstrStream.iSize; ++iCurrInstrIndex) {
+				// Read the opcode (2 bytes)
+
+				g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpcode = 0;
+				//fread (&g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpcode, 2, 1, pScriptFile);
+				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpcode, 2);
+
+				// Read the operand count (1 byte)
+
+				g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount = 0;
+				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount, 1);
+
+				int iOpCount = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount;
+
+				// Allocate space for the operand list in a temporary pointer
+
+				Value [] pOpList = new Value [iOpCount];
+				for (int i = 0; i < iOpCount; i++) pOpList [i] = new Value ();
+
+				if (pOpList == null)
 					return XS_LOAD_ERROR_OUT_OF_MEMORY;
 
-				// Read the string (4 bytes) and append a null terminator
+				// Read in the operand list (N bytes)
 
-				string exeIdString = "";
-				ReadStringFromFileStream (pScriptFile, ref exeIdString, 4);
+				for (int iCurrOpIndex = 0; iCurrOpIndex < iOpCount; ++iCurrOpIndex) {
+					// Read in the operand type (1 byte)
 
+					pOpList [iCurrOpIndex].iType = 0;
+					ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iType, 1);
+					//fread (&pOpList [iCurrOpIndex].iType, 1, 1, pScriptFile);
 
-				// Compare the data read from the file to the ID string and exit on an error if they don't
-				// match
-				// ignore culture case for a better speed of compare
+					// Depending on the type, read in the operand data
 
-				if (string.Compare (XSE_ID_STRING, exeIdString, StringComparison.Ordinal) != 0)
-					return XS_LOAD_ERROR_INVALID_XSE;
+					switch (pOpList [iCurrOpIndex].iType) {
+					// Integer literal
 
-				// Free the buffer
+					case OP_TYPE_INT:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
+						//fread (&pOpList [iCurrOpIndex].iIntLiteral, sizeof (int), 1, pScriptFile);
+						break;
 
-				//free (pstrIDString);
+					// Floating-point literal
 
+					case OP_TYPE_FLOAT:
+						ReadFloatFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].fFloatLiteral, sizeof (float));
+						//fread (&pOpList [iCurrOpIndex].fFloatLiteral, sizeof (float), 1, pScriptFile);
+						break;
 
+					// String index
 
-				// Read the script version (2 bytes total)
+					case OP_TYPE_STRING:
 
-				int iMajorVersion = 0;
-				int iMinorVersion = 0;
+						// Since there's no field in the Value structure for string table
+						// indices, read the index into the integer literal field and set
+						// its type to string index
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
+						pOpList [iCurrOpIndex].iType = OP_TYPE_STRING;
+						break;
 
-				iMajorVersion = pScriptFile.ReadByte ();
-				iMinorVersion = pScriptFile.ReadByte ();
+					// Instruction index
 
-				// Validate the version, since this prototype only supports version 0.8 scripts
+					case OP_TYPE_INSTR_INDEX:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
 
-				if (iMajorVersion != 0 || iMinorVersion != 8)
-					return XS_LOAD_ERROR_UNSUPPORTED_VERS;
+						break;
 
-				// Read the stack size (4 bytes)
+					// Absolute stack index
 
-				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].Stack.iSize);
+					case OP_TYPE_ABS_STACK_INDEX:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
 
-				// Check for a default stack size request
+						//fread (&pOpList [iCurrOpIndex].iStackIndex, sizeof (int), 1, pScriptFile);
+						break;
 
-				if (g_Scripts [iThreadIndex].Stack.iSize == 0)
-					g_Scripts [iThreadIndex].Stack.iSize = DEF_STACK_SIZE;
+					// Relative stack index
 
-				// Allocate the runtime stack
+					case OP_TYPE_REL_STACK_INDEX:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iOffsetIndex, sizeof (int));
 
-				int iStackSize = g_Scripts [iThreadIndex].Stack.iSize;
-				g_Scripts [iThreadIndex].Stack.pElmnts = new List<Value> (iStackSize);
+						//fread (&pOpList [iCurrOpIndex].iStackIndex, sizeof (int), 1, pScriptFile);
+						//fread (&pOpList [iCurrOpIndex].iOffsetIndex, sizeof (int), 1, pScriptFile);
+						break;
 
-				if (g_Scripts [iThreadIndex].Stack.pElmnts == null)
-					return XS_LOAD_ERROR_OUT_OF_MEMORY;
+					// Function index
 
-				// Read the global data size (4 bytes)
+					case OP_TYPE_FUNC_INDEX:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
 
-				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iGlobalDataSize);
+						//fread (&pOpList [iCurrOpIndex].iFuncIndex, sizeof (int), 1, pScriptFile);
+						break;
 
-				// Check for presence of _Main () (1 byte)
+					// Host API call index
 
-				ReadBoolFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iIsMainFuncPresent);
+					case OP_TYPE_HOST_API_CALL_INDEX:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iHostAPICallIndex, sizeof (int));
 
-				// Read _Main ()'s function index (4 bytes)
+						//fread (&pOpList [iCurrOpIndex].iHostAPICallIndex, sizeof (int), 1, pScriptFile);
+						break;
 
-				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iMainFuncIndex);
+					// Register
 
+					case OP_TYPE_REG:
+						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntValue, sizeof (int));
 
-				// Read the priority type (1 byte)
-
-				int iPriorityType = 0;
-				iPriorityType = pScriptFile.ReadByte ();
-
-				// Read the user-defined priority (4 bytes)
-
-				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].iTimesliceDur);
-
-
-				// Override the script-specified priority if necessary
-
-				if (iThreadTimeslice != XS_THREAD_PRIORITY_USER)
-					iPriorityType = iThreadTimeslice;
-
-				// If the priority type is not set to user-defined, fill in the appropriate timeslice
-				// duration
-
-				switch (iPriorityType) {
-				case XS_THREAD_PRIORITY_LOW:
-					g_Scripts [iThreadIndex].iTimesliceDur = THREAD_PRIORITY_DUR_LOW;
-					break;
-
-				case XS_THREAD_PRIORITY_MED:
-					g_Scripts [iThreadIndex].iTimesliceDur = THREAD_PRIORITY_DUR_MED;
-					break;
-
-				case XS_THREAD_PRIORITY_HIGH:
-					g_Scripts [iThreadIndex].iTimesliceDur = THREAD_PRIORITY_DUR_HIGH;
-					break;
+						//fread (&pOpList [iCurrOpIndex].iReg, sizeof (int), 1, pScriptFile);
+						break;
+					}
 				}
 
-				// ---- Read the instruction stream
+				// Assign the operand list pointer to the instruction stream
 
-				// Read the instruction count (4 bytes)
-
-				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].InstrStream.iSize);
-
+				g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].pOpList = pOpList;
+			}
 
 
+			// ---- Read the string table
 
-				// Allocate the stream
+			// Read the table size (4 bytes)
 
-				g_Scripts [iThreadIndex].InstrStream.pInstrs = new List<Instr> (g_Scripts [iThreadIndex].InstrStream.iSize);
+			int iStringTableSize = 0;
+			ReadIntFromFileStream (pScriptFile, ref iStringTableSize, sizeof (int));
 
-				if (g_Scripts [iThreadIndex].InstrStream.pInstrs == null)
+			// If the string table exists, read it
+
+			if (iStringTableSize != 0) {
+				// Allocate a string table of this size
+
+				string [] ppstrStringTable = new string [iStringTableSize];
+				if (ppstrStringTable == null)
 					return XS_LOAD_ERROR_OUT_OF_MEMORY;
+				//for(int i = 0; i <iStringTableSize; i++) 
 
-				// Read the instruction data
+				// Read in each string
+
+				for (int iCurrStringIndex = 0; iCurrStringIndex < iStringTableSize; ++iCurrStringIndex) {
+					// Read in the string size (4 bytes)
+
+					int iStringSize = 0;
+					ReadIntFromFileStream (pScriptFile, ref iStringSize, sizeof (int));
+
+
+					// Allocate space for the string plus a null terminator
+					// Read in the string data (N bytes) and append the null terminator
+
+					string pstrCurrString = "";
+					ReadStringFromFileStream (pScriptFile, ref pstrCurrString, iStringSize);
+
+
+					// Assign the string pointer to the string table
+
+					ppstrStringTable [iCurrStringIndex] = pstrCurrString;
+				}
+
+				// Run through each operand in the instruction stream and assign copies of string
+				// operand's corresponding string literals
 
 				for (int iCurrInstrIndex = 0; iCurrInstrIndex < g_Scripts [iThreadIndex].InstrStream.iSize; ++iCurrInstrIndex) {
-					// Read the opcode (2 bytes)
-
-					g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpcode = 0;
-					//fread (&g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpcode, 2, 1, pScriptFile);
-					ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpcode, 2);
-
-					// Read the operand count (1 byte)
-
-					g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount = 0;
-					ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount, 1);
+					// Get the instruction's operand count and a copy of it's operand list
 
 					int iOpCount = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount;
+					Value [] pOpList = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].pOpList;
 
-					// Allocate space for the operand list in a temporary pointer
-
-					List<Value> pOpList = new List<Value> (iOpCount);
-					if (pOpList == null)
-						return XS_LOAD_ERROR_OUT_OF_MEMORY;
-
-					// Read in the operand list (N bytes)
+					// Loop through each operand
 
 					for (int iCurrOpIndex = 0; iCurrOpIndex < iOpCount; ++iCurrOpIndex) {
-						// Read in the operand type (1 byte)
+						// If the operand is a string index, make a local copy of it's corresponding
+						// string in the table
 
-						pOpList [iCurrOpIndex].iType = 0;
-						ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iType, 1);
-						//fread (&pOpList [iCurrOpIndex].iType, 1, 1, pScriptFile);
+						if (pOpList [iCurrOpIndex].iType == OP_TYPE_STRING) {
+							// Get the string index from the operand's integer literal field
 
-						// Depending on the type, read in the operand data
+							int iStringIndex = pOpList [iCurrOpIndex].iIntValue;
 
-						switch (pOpList [iCurrOpIndex].iType) {
-						// Integer literal
+							// Allocate a new string to hold a copy of the one in the table
 
-						case OP_TYPE_INT:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntLiteral, sizeof (int));
-							//fread (&pOpList [iCurrOpIndex].iIntLiteral, sizeof (int), 1, pScriptFile);
-							break;
+							//string pstrStringCopy;
+							//if (!(pstrStringCopy = (string)malloc (strlen () + 1)))
+							//return XS_LOAD_ERROR_OUT_OF_MEMORY;
 
-						// Floating-point literal
+							// Make a copy of the string
 
-						case OP_TYPE_FLOAT:
-							ReadFloatFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].fFloatLiteral, sizeof (float));
-							//fread (&pOpList [iCurrOpIndex].fFloatLiteral, sizeof (float), 1, pScriptFile);
-							break;
+							//strcpy (pstrStringCopy, ppstrStringTable [iStringIndex]);
 
-						// String index
+							//int stringListIndex = g_StringList.Count;
+							//g_StringList.Add (ppstrStringTable [iStringIndex]);
 
-						case OP_TYPE_STRING:
+							// Save the string pointer in the operand list
 
-							// Since there's no field in the Value structure for string table
-							// indices, read the index into the integer literal field and set
-							// its type to string index
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iIntLiteral, sizeof (int));
-							pOpList [iCurrOpIndex].iType = OP_TYPE_STRING;
-							break;
-
-						// Instruction index
-
-						case OP_TYPE_INSTR_INDEX:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iInstrIndex, sizeof (int));
-
-							break;
-
-						// Absolute stack index
-
-						case OP_TYPE_ABS_STACK_INDEX:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iStackIndex, sizeof (int));
-
-							//fread (&pOpList [iCurrOpIndex].iStackIndex, sizeof (int), 1, pScriptFile);
-							break;
-
-						// Relative stack index
-
-						case OP_TYPE_REL_STACK_INDEX:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iStackIndex, sizeof (int));
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iOffsetIndex, sizeof (int));
-
-							//fread (&pOpList [iCurrOpIndex].iStackIndex, sizeof (int), 1, pScriptFile);
-							//fread (&pOpList [iCurrOpIndex].iOffsetIndex, sizeof (int), 1, pScriptFile);
-							break;
-
-						// Function index
-
-						case OP_TYPE_FUNC_INDEX:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iFuncIndex, sizeof (int));
-
-							//fread (&pOpList [iCurrOpIndex].iFuncIndex, sizeof (int), 1, pScriptFile);
-							break;
-
-						// Host API call index
-
-						case OP_TYPE_HOST_API_CALL_INDEX:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iHostAPICallIndex, sizeof (int));
-
-							//fread (&pOpList [iCurrOpIndex].iHostAPICallIndex, sizeof (int), 1, pScriptFile);
-							break;
-
-						// Register
-
-						case OP_TYPE_REG:
-							ReadIntFromFileStream (pScriptFile, ref pOpList [iCurrOpIndex].iReg, sizeof (int));
-
-							//fread (&pOpList [iCurrOpIndex].iReg, sizeof (int), 1, pScriptFile);
-							break;
+							pOpList [iCurrOpIndex].pstrStringLiteral = ppstrStringTable [iStringIndex];
 						}
 					}
-
-					// Assign the operand list pointer to the instruction stream
-
-					g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].pOpList = pOpList;
 				}
 
+				// ---- Free the original strings
 
-				// ---- Read the string table
+				for (int iCurrStringIndex = 0; iCurrStringIndex < iStringTableSize; ++iCurrStringIndex)
+					ppstrStringTable [iCurrStringIndex] = null;
 
-				// Read the table size (4 bytes)
+				ppstrStringTable = null;
+				// ---- Free the string table itself
 
-				int iStringTableSize = 0;
-				ReadIntFromFileStream (pScriptFile, ref iStringTableSize, sizeof (int));
-
-				// If the string table exists, read it
-
-				if (iStringTableSize != 0) {
-					// Allocate a string table of this size
-
-					List<string> ppstrStringTable = new List<string> (iStringTableSize);
-					if (ppstrStringTable == null)
-						return XS_LOAD_ERROR_OUT_OF_MEMORY;
-
-					// Read in each string
-
-					for (int iCurrStringIndex = 0; iCurrStringIndex < iStringTableSize; ++iCurrStringIndex) {
-						// Read in the string size (4 bytes)
-
-						int iStringSize = 0;
-						ReadIntFromFileStream (pScriptFile, ref iStringSize, sizeof (int));
-
-
-						// Allocate space for the string plus a null terminator
-						// Read in the string data (N bytes) and append the null terminator
-
-						string pstrCurrString = "";
-						ReadStringFromFileStream (pScriptFile, ref pstrCurrString, iStringSize);
-
-
-						// Assign the string pointer to the string table
-
-						ppstrStringTable [iCurrStringIndex] = pstrCurrString;
-					}
-
-					// Run through each operand in the instruction stream and assign copies of string
-					// operand's corresponding string literals
-
-					for (int iCurrInstrIndex = 0; iCurrInstrIndex < g_Scripts [iThreadIndex].InstrStream.iSize; ++iCurrInstrIndex) {
-						// Get the instruction's operand count and a copy of it's operand list
-
-						int iOpCount = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount;
-						List<Value> pOpList = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].pOpList;
-
-						// Loop through each operand
-
-						for (int iCurrOpIndex = 0; iCurrOpIndex < iOpCount; ++iCurrOpIndex) {
-							// If the operand is a string index, make a local copy of it's corresponding
-							// string in the table
-
-							if (pOpList [iCurrOpIndex].iType == OP_TYPE_STRING) {
-								// Get the string index from the operand's integer literal field
-
-								int iStringIndex = pOpList [iCurrOpIndex].iIntLiteral;
-
-								// Allocate a new string to hold a copy of the one in the table
-
-								//string pstrStringCopy;
-								//if (!(pstrStringCopy = (string)malloc (strlen () + 1)))
-								//return XS_LOAD_ERROR_OUT_OF_MEMORY;
-
-								// Make a copy of the string
-
-								//strcpy (pstrStringCopy, ppstrStringTable [iStringIndex]);
-
-								//int stringListIndex = g_StringList.Count;
-								//g_StringList.Add (ppstrStringTable [iStringIndex]);
-
-								// Save the string pointer in the operand list
-
-								pOpList [iCurrOpIndex].pstrStringLiteral = ppstrStringTable [iStringIndex];
-							}
-						}
-					}
-
-					// ---- Free the original strings
-
-					for (int iCurrStringIndex = 0; iCurrStringIndex < iStringTableSize; ++iCurrStringIndex)
-						ppstrStringTable [iCurrStringIndex] = null;
-
-					ppstrStringTable.Clear ();
-					// ---- Free the string table itself
-
-					//free (ppstrStringTable);
-				}
-
-
-				// ---- Read the function table
-
-				// Read the function count (4 bytes)
-
-				int iFuncTableSize = 0;
-				ReadIntFromFileStream (pScriptFile, ref iFuncTableSize, 4);
-				//fread (&iFuncTableSize, 4, 1, pScriptFile);
-
-				g_Scripts [iThreadIndex].FuncTable.iSize = iFuncTableSize;
-
-				// Allocate the table
-				g_Scripts [iThreadIndex].FuncTable.pFuncs = new List<Func> (iFuncTableSize);
-				if (g_Scripts [iThreadIndex].FuncTable.pFuncs == null)
-					return XS_LOAD_ERROR_OUT_OF_MEMORY;
-
-				// Read each function
-
-				for (int iCurrFuncIndex = 0; iCurrFuncIndex < iFuncTableSize; ++iCurrFuncIndex) {
-					// Read the entry point (4 bytes)
-
-					int iEntryPoint = -1;
-					ReadIntFromFileStream (pScriptFile, ref iEntryPoint, 4);
-
-					// Read the parameter count (1 byte)
-
-					int iParamCount = 0;
-					ReadIntFromFileStream (pScriptFile, ref iParamCount, 1);
-
-					// Read the local data size (4 bytes)
-
-					int iLocalDataSize = 0;
-					ReadIntFromFileStream (pScriptFile, ref iLocalDataSize, 4);
-
-
-					// Calculate the stack size
-
-					int iStackFrameSize = iParamCount + 1 + iLocalDataSize;
-
-					// Read the function name length (1 byte)
-
-					int iFuncNameLength = 0;
-					ReadIntFromFileStream (pScriptFile, ref iFuncNameLength, 1);
-
-
-
-					// Read the function name (N bytes) and append a null-terminator
-					ReadStringFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].pstrName, iFuncNameLength);
-					//fread (&g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].pstrName, iFuncNameLength, 1, pScriptFile);
-					//g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].pstrName [iFuncNameLength] = '\0';
-
-					// Write everything to the function table
-
-					g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iEntryPoint = iEntryPoint;
-					g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iParamCount = iParamCount;
-					g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iLocalDataSize = iLocalDataSize;
-					g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iStackFrameSize = iStackFrameSize;
-				}
-
-				// ---- Read the host API call table
-
-				// Read the host API call count
-				ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].HostAPICallTable.iSize, 4);
-				//fread (&g_Scripts [iThreadIndex].HostAPICallTable.iSize, 4, 1, pScriptFile);
-
-				// Allocate the table
-				g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls = new List<string> (g_Scripts [iThreadIndex].HostAPICallTable.iSize);
-				if (g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls != null)
-					return XS_LOAD_ERROR_OUT_OF_MEMORY;
-
-				// Read each host API call
-
-				for (int iCurrCallIndex = 0; iCurrCallIndex < g_Scripts [iThreadIndex].HostAPICallTable.iSize; ++iCurrCallIndex) {
-					// Read the host API call string size (1 byte)
-
-					int iCallLength = 0;
-					ReadIntFromFileStream (pScriptFile, ref iCallLength, 1);
-					//fread (&iCallLength, 1, 1, pScriptFile);
-
-					// Allocate space for the string plus the null terminator in a temporary pointer
-
-					string pstrCurrCall = "";
-					ReadStringFromFileStream (pScriptFile, ref pstrCurrCall, iCallLength);
-					//if (!(pstrCurrCall = (string)malloc (iCallLength + 1)))
-					//return XS_LOAD_ERROR_OUT_OF_MEMORY;
-
-					// Read the host API call string data and append the null terminator
-
-					//fread (pstrCurrCall, iCallLength, 1, pScriptFile);
-					//pstrCurrCall [iCallLength] = '\0';
-
-					// Assign the temporary pointer to the table
-
-					g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls [iCurrCallIndex] = pstrCurrCall;
-				}
-
-				// ---- Close the input file
-				pScriptFile.Close ();
+				//free (ppstrStringTable);
 			}
+
+
+			// ---- Read the function table
+
+			// Read the function count (4 bytes)
+
+			int iFuncTableSize = 0;
+			ReadIntFromFileStream (pScriptFile, ref iFuncTableSize, 4);
+			//fread (&iFuncTableSize, 4, 1, pScriptFile);
+
+			g_Scripts [iThreadIndex].FuncTable.iSize = iFuncTableSize;
+
+			// Allocate the table
+			g_Scripts [iThreadIndex].FuncTable.pFuncs = new Func [iFuncTableSize];
+			//for (int i = 0; i < iFuncTableSize) ; i++) 
+			if (g_Scripts [iThreadIndex].FuncTable.pFuncs == null)
+				return XS_LOAD_ERROR_OUT_OF_MEMORY;
+
+			// Read each function
+
+			for (int iCurrFuncIndex = 0; iCurrFuncIndex < iFuncTableSize; ++iCurrFuncIndex) {
+				// Read the entry point (4 bytes)
+
+				int iEntryPoint = -1;
+				ReadIntFromFileStream (pScriptFile, ref iEntryPoint, 4);
+
+				// Read the parameter count (1 byte)
+
+				int iParamCount = 0;
+				ReadIntFromFileStream (pScriptFile, ref iParamCount, 1);
+
+				// Read the local data size (4 bytes)
+
+				int iLocalDataSize = 0;
+				ReadIntFromFileStream (pScriptFile, ref iLocalDataSize, 4);
+
+
+				// Calculate the stack size
+
+				int iStackFrameSize = iParamCount + 1 + iLocalDataSize;
+
+				// Read the function name length (1 byte)
+
+				int iFuncNameLength = 0;
+				ReadIntFromFileStream (pScriptFile, ref iFuncNameLength, 1);
+
+
+
+				// Read the function name (N bytes) and append a null-terminator
+				ReadStringFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].pstrName, iFuncNameLength);
+				//fread (&g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].pstrName, iFuncNameLength, 1, pScriptFile);
+				//g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].pstrName [iFuncNameLength] = '\0';
+
+				// Write everything to the function table
+
+				g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iEntryPoint = iEntryPoint;
+				g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iParamCount = iParamCount;
+				g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iLocalDataSize = iLocalDataSize;
+				g_Scripts [iThreadIndex].FuncTable.pFuncs [iCurrFuncIndex].iStackFrameSize = iStackFrameSize;
+			}
+
+			// ---- Read the host API call table
+
+			// Read the host API call count
+			ReadIntFromFileStream (pScriptFile, ref g_Scripts [iThreadIndex].HostAPICallTable.iSize, 4);
+			//fread (&g_Scripts [iThreadIndex].HostAPICallTable.iSize, 4, 1, pScriptFile);
+
+			// Allocate the table
+			g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls = new string [g_Scripts [iThreadIndex].HostAPICallTable.iSize];
+			if (g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls == null)
+				return XS_LOAD_ERROR_OUT_OF_MEMORY;
+
+			// Read each host API call
+
+			for (int iCurrCallIndex = 0; iCurrCallIndex < g_Scripts [iThreadIndex].HostAPICallTable.iSize; ++iCurrCallIndex) {
+				// Read the host API call string size (1 byte)
+
+				int iCallLength = 0;
+				ReadIntFromFileStream (pScriptFile, ref iCallLength, 1);
+				//fread (&iCallLength, 1, 1, pScriptFile);
+
+				// Allocate space for the string plus the null terminator in a temporary pointer
+
+				string pstrCurrCall = "";
+				ReadStringFromFileStream (pScriptFile, ref pstrCurrCall, iCallLength);
+				//if (!(pstrCurrCall = (string)malloc (iCallLength + 1)))
+				//return XS_LOAD_ERROR_OUT_OF_MEMORY;
+
+				// Read the host API call string data and append the null terminator
+
+				//fread (pstrCurrCall, iCallLength, 1, pScriptFile);
+				//pstrCurrCall [iCallLength] = '\0';
+
+				// Assign the temporary pointer to the table
+
+				g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls [iCurrCallIndex] = pstrCurrCall;
+			}
+
+			// ---- Close the input file
+			pScriptFile.Close ();
+
 
 
 
@@ -1022,7 +1045,7 @@ namespace Skylight
 				// Make a local copy of the operand count and operand list
 
 				int iOpCount = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].iOpCount;
-				List<Value> pOpList = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].pOpList;
+				Value [] pOpList = g_Scripts [iThreadIndex].InstrStream.pInstrs [iCurrInstrIndex].pOpList;
 
 				// Loop through each operand and free its string pointer
 
@@ -1046,14 +1069,14 @@ namespace Skylight
 
 			// Now free the stack itself
 
-			if (g_Scripts [iThreadIndex].Stack.pElmnts != null)
-				g_Scripts [iThreadIndex].Stack.pElmnts.Clear ();
+			//if (g_Scripts [iThreadIndex].Stack.pElmnts != null)
+			g_Scripts [iThreadIndex].Stack.pElmnts = null;
 
 
 			// ---- Free the function table
 
-			if (g_Scripts [iThreadIndex].FuncTable.pFuncs != null)
-				g_Scripts [iThreadIndex].FuncTable.pFuncs.Clear ();
+			g_Scripts [iThreadIndex].FuncTable.pFuncs = null;
+
 
 			// --- Free the host API call table
 
@@ -1064,9 +1087,7 @@ namespace Skylight
 					g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls [iCurrCallIndex] = null;
 
 			// Now free the table itself
-
-			if (g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls != null)
-				g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls.Clear ();
+			g_Scripts [iThreadIndex].HostAPICallTable.ppstrCalls = null;
 		}
 
 		/******************************************************************************************
@@ -1282,7 +1303,7 @@ namespace Skylight
 						case INSTR_ADD:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral += ResolveOpAsInt (1);
+								Dest.iIntValue += ResolveOpAsInt (1);
 							else
 								Dest.fFloatLiteral += ResolveOpAsFloat (1);
 
@@ -1293,7 +1314,7 @@ namespace Skylight
 						case INSTR_SUB:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral -= ResolveOpAsInt (1);
+								Dest.iIntValue -= ResolveOpAsInt (1);
 							else
 								Dest.fFloatLiteral -= ResolveOpAsFloat (1);
 
@@ -1304,7 +1325,7 @@ namespace Skylight
 						case INSTR_MUL:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral *= ResolveOpAsInt (1);
+								Dest.iIntValue *= ResolveOpAsInt (1);
 							else
 								Dest.fFloatLiteral *= ResolveOpAsFloat (1);
 
@@ -1315,7 +1336,7 @@ namespace Skylight
 						case INSTR_DIV:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral /= ResolveOpAsInt (1);
+								Dest.iIntValue /= ResolveOpAsInt (1);
 							else
 								Dest.fFloatLiteral /= ResolveOpAsFloat (1);
 
@@ -1328,7 +1349,7 @@ namespace Skylight
 							// Remember, Mod works with integers only
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral %= ResolveOpAsInt (1);
+								Dest.iIntValue %= ResolveOpAsInt (1);
 
 							break;
 
@@ -1337,7 +1358,7 @@ namespace Skylight
 						case INSTR_EXP:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral = (int)Math.Pow (Dest.iIntLiteral, ResolveOpAsInt (1));
+								Dest.iIntValue = (int)Math.Pow (Dest.iIntValue, ResolveOpAsInt (1));
 							else
 								Dest.fFloatLiteral = (float)Math.Pow (Dest.fFloatLiteral, ResolveOpAsFloat (1));
 
@@ -1351,7 +1372,7 @@ namespace Skylight
 						case INSTR_AND:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral &= ResolveOpAsInt (1);
+								Dest.iIntValue &= ResolveOpAsInt (1);
 
 							break;
 
@@ -1360,7 +1381,7 @@ namespace Skylight
 						case INSTR_OR:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral |= ResolveOpAsInt (1);
+								Dest.iIntValue |= ResolveOpAsInt (1);
 
 							break;
 
@@ -1369,7 +1390,7 @@ namespace Skylight
 						case INSTR_XOR:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral ^= ResolveOpAsInt (1);
+								Dest.iIntValue ^= ResolveOpAsInt (1);
 
 							break;
 
@@ -1378,7 +1399,7 @@ namespace Skylight
 						case INSTR_SHL:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral <<= ResolveOpAsInt (1);
+								Dest.iIntValue <<= ResolveOpAsInt (1);
 
 							break;
 
@@ -1387,7 +1408,7 @@ namespace Skylight
 						case INSTR_SHR:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral >>= ResolveOpAsInt (1);
+								Dest.iIntValue >>= ResolveOpAsInt (1);
 
 							break;
 						}
@@ -1396,7 +1417,7 @@ namespace Skylight
 						// move the result there
 
 						Value value = ResolveOpPntr (0);
-						value = Dest;
+						value.SetValue (ref Dest);
 
 						break;
 					}
@@ -1425,7 +1446,7 @@ namespace Skylight
 						case INSTR_NEG:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral = -Dest.iIntLiteral;
+								Dest.iIntValue = -Dest.iIntValue;
 							else
 								Dest.fFloatLiteral = -Dest.fFloatLiteral;
 
@@ -1436,7 +1457,7 @@ namespace Skylight
 						case INSTR_NOT:
 
 							if (Dest.iType == OP_TYPE_INT)
-								Dest.iIntLiteral = ~Dest.iIntLiteral;
+								Dest.iIntValue = ~Dest.iIntValue;
 
 							break;
 
@@ -1445,7 +1466,7 @@ namespace Skylight
 						case INSTR_INC:
 
 							if (Dest.iType == OP_TYPE_INT)
-								++Dest.iIntLiteral;
+								++Dest.iIntValue;
 							else
 								++Dest.fFloatLiteral;
 
@@ -1456,7 +1477,7 @@ namespace Skylight
 						case INSTR_DEC:
 
 							if (Dest.iType == OP_TYPE_INT)
-								--Dest.iIntLiteral;
+								--Dest.iIntValue;
 							else
 								--Dest.fFloatLiteral;
 
@@ -1466,7 +1487,7 @@ namespace Skylight
 						// Move the result to the destination
 
 						Value value = ResolveOpPntr (0);
-						value = Dest;
+						value.SetValue (ref Dest);
 
 						break;
 					}
@@ -1510,7 +1531,8 @@ namespace Skylight
 						// Copy the concatenated string pointer to its destination
 
 						Value value = ResolveOpPntr (0);
-						value = Dest;
+						value.SetValue (ref Dest);
+
 
 						break;
 					}
@@ -1560,7 +1582,8 @@ namespace Skylight
 						// Copy the concatenated string pointer to its destination
 
 						Value value = ResolveOpPntr (0);
-						value = Dest;
+						value.SetValue (ref Dest);
+
 
 						break;
 					}
@@ -1626,7 +1649,7 @@ namespace Skylight
 						case INSTR_JE: {
 								switch (Op0.iType) {
 								case OP_TYPE_INT:
-									if (Op0.iIntLiteral == Op1.iIntLiteral)
+									if (Op0.iIntValue == Op1.iIntValue)
 										iJump = true;
 									break;
 
@@ -1648,7 +1671,7 @@ namespace Skylight
 						case INSTR_JNE: {
 								switch (Op0.iType) {
 								case OP_TYPE_INT:
-									if (Op0.iIntLiteral != Op1.iIntLiteral)
+									if (Op0.iIntValue != Op1.iIntValue)
 										iJump = true;
 									break;
 
@@ -1670,7 +1693,7 @@ namespace Skylight
 						case INSTR_JG:
 
 							if (Op0.iType == OP_TYPE_INT) {
-								if (Op0.iIntLiteral > Op1.iIntLiteral)
+								if (Op0.iIntValue > Op1.iIntValue)
 									iJump = true;
 							} else {
 								if (Op0.fFloatLiteral > Op1.fFloatLiteral)
@@ -1684,7 +1707,7 @@ namespace Skylight
 						case INSTR_JL:
 
 							if (Op0.iType == OP_TYPE_INT) {
-								if (Op0.iIntLiteral < Op1.iIntLiteral)
+								if (Op0.iIntValue < Op1.iIntValue)
 									iJump = true;
 							} else {
 								if (Op0.fFloatLiteral < Op1.fFloatLiteral)
@@ -1698,7 +1721,7 @@ namespace Skylight
 						case INSTR_JGE:
 
 							if (Op0.iType == OP_TYPE_INT) {
-								if (Op0.iIntLiteral >= Op1.iIntLiteral)
+								if (Op0.iIntValue >= Op1.iIntValue)
 									iJump = true;
 							} else {
 								if (Op0.fFloatLiteral >= Op1.fFloatLiteral)
@@ -1712,7 +1735,7 @@ namespace Skylight
 						case INSTR_JLE:
 
 							if (Op0.iType == OP_TYPE_INT) {
-								if (Op0.iIntLiteral <= Op1.iIntLiteral)
+								if (Op0.iIntValue <= Op1.iIntValue)
 									iJump = true;
 							} else {
 								if (Op0.fFloatLiteral <= Op1.fFloatLiteral)
@@ -1785,7 +1808,7 @@ namespace Skylight
 
 						// Get the previous function index
 
-						Func CurrFunc = GetFunc (g_iCurrThread, FuncIndex.iFuncIndex);
+						Func CurrFunc = GetFunc (g_iCurrThread, FuncIndex.iIntValue);
 						int iFrameIndex = FuncIndex.iOffsetIndex;
 
 						// Read the return address structure from the stack, which is stored one
@@ -1803,7 +1826,7 @@ namespace Skylight
 
 						// Make the jump to the return address
 
-						g_Scripts [g_iCurrThread].InstrStream.iCurrInstr = ReturnAddr.iInstrIndex;
+						g_Scripts [g_iCurrThread].InstrStream.iCurrInstr = ReturnAddr.iIntValue;
 
 						break;
 					}
@@ -1874,7 +1897,7 @@ namespace Skylight
 
 						// Get it from the integer field
 
-						int iExitCode = ExitCode.iIntLiteral;
+						int iExitCode = ExitCode.iIntValue;
 
 						// Tell the XVM to stop executing the script
 
@@ -2006,7 +2029,7 @@ namespace Skylight
 
 			// Return _RetVal's integer field
 
-			return g_Scripts [iThreadIndex]._RetVal.iIntLiteral;
+			return g_Scripts [iThreadIndex]._RetVal.iIntValue;
 		}
 
 		/******************************************************************************************
@@ -2088,7 +2111,7 @@ namespace Skylight
 			// It's an integer, so return it as-is
 
 			case OP_TYPE_INT:
-				return Val.iIntLiteral;
+				return Val.iIntValue;
 
 			// It's a float, so cast it to an integer
 
@@ -2122,7 +2145,7 @@ namespace Skylight
 			// It's an integer, so cast it to a float
 
 			case OP_TYPE_INT:
-				return (float)Val.iIntLiteral;
+				return (float)Val.iIntValue;
 
 			// It's a float, so return it as-is
 
@@ -2162,7 +2185,7 @@ namespace Skylight
 
 			case OP_TYPE_INT:
 				//sprintf (pstrCoercion, "%f", Val.iIntLiteral);
-				pstrCoercion = Val.iIntLiteral.ToString ();
+				pstrCoercion = Val.iIntValue.ToString ();
 				//                itoa ( Val.iIntLiteral, pstrCoercion, 10 );
 				return pstrCoercion;
 
@@ -2228,14 +2251,14 @@ namespace Skylight
 			// It's an absolute index so return it as-is
 
 			case OP_TYPE_ABS_STACK_INDEX:
-				return OpValue.iStackIndex;
+				return OpValue.iIntValue;
 
 			// It's a relative index so resolve it
 
 			case OP_TYPE_REL_STACK_INDEX: {
 					// First get the base index
 
-					int iBaseIndex = OpValue.iStackIndex;
+					int iBaseIndex = OpValue.iIntValue;
 
 					// Now get the index of the variable
 
@@ -2248,7 +2271,7 @@ namespace Skylight
 					// Now add the variable's integer field to the base index to produce the
 					// absolute index
 
-					return iBaseIndex + StackValue.iIntLiteral;
+					return iBaseIndex + StackValue.iIntValue;
 				}
 
 			// Return zero for everything else, but we shouldn't encounter this case
@@ -2392,7 +2415,7 @@ namespace Skylight
 
 			// Return it's instruction index
 
-			return OpValue.iInstrIndex;
+			return OpValue.iIntValue;
 		}
 
 		/******************************************************************************************
@@ -2410,7 +2433,7 @@ namespace Skylight
 
 			// Return the function index
 
-			return OpValue.iFuncIndex;
+			return OpValue.iIntValue;
 		}
 
 		/******************************************************************************************
@@ -2513,11 +2536,11 @@ namespace Skylight
 
 
 			// Get the top value of stack
-			Value value = g_Scripts [iThreadIndex].Stack.pElmnts [iTopIndex];
+			//Value value =;
 
 			// Put the value into the current top index
 
-			CopyValue (ref value, Val);
+			CopyValue (ref g_Scripts [iThreadIndex].Stack.pElmnts [iTopIndex], Val);
 
 			// Increment the top index
 
@@ -2543,7 +2566,7 @@ namespace Skylight
 
 			// Use this index to read the top element
 
-			Value Val = null;
+			Value Val = new Value ();
 			CopyValue (ref Val, g_Scripts [iThreadIndex].Stack.pElmnts [iTopIndex]);
 
 			// Return the value to the caller
@@ -2653,8 +2676,8 @@ namespace Skylight
 
 			// Push the return address, which is the current instruction
 
-			Value ReturnAddr = null;
-			ReturnAddr.iInstrIndex = g_Scripts [iThreadIndex].InstrStream.iCurrInstr;
+			Value ReturnAddr = new Value ();
+			ReturnAddr.iIntValue = g_Scripts [iThreadIndex].InstrStream.iCurrInstr;
 			Push (iThreadIndex, ReturnAddr);
 
 			// Push the stack frame + 1 (the extra space is for the function index
@@ -2664,8 +2687,8 @@ namespace Skylight
 
 			// Write the function index and old stack frame to the top of the stack
 
-			Value FuncIndex = null;
-			FuncIndex.iFuncIndex = iIndex;
+			Value FuncIndex = new Value ();
+			FuncIndex.iIntValue = iIndex;
 			FuncIndex.iOffsetIndex = iFrameIndex;
 			SetStackValue (iThreadIndex, g_Scripts [iThreadIndex].Stack.iTopIndex - 1, FuncIndex);
 
@@ -2687,7 +2710,7 @@ namespace Skylight
 
 			Value Param = new Value ();
 			Param.iType = OP_TYPE_INT;
-			Param.iIntLiteral = iInt;
+			Param.iIntValue = iInt;
 
 			// Push the parameter onto the stack
 
@@ -2874,6 +2897,8 @@ namespace Skylight
 					// Set the function to active
 
 					g_HostAPI [iCurrHostAPIFunc].iIsActive = true;
+
+					break;
 				}
 			}
 		}
@@ -2977,7 +3002,7 @@ namespace Skylight
 			// Put the return value and type in _RetVal
 
 			g_Scripts [iThreadIndex]._RetVal.iType = OP_TYPE_INT;
-			g_Scripts [iThreadIndex]._RetVal.iIntLiteral = iInt;
+			g_Scripts [iThreadIndex]._RetVal.iIntValue = iInt;
 		}
 
 		/******************************************************************************************
