@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Skylight
@@ -52,7 +53,7 @@ namespace Skylight
 		IEnumerator AfterInitialize ()
 		{
 			yield return null;
-			SceneManager.Instance ().LoadScene ("Workspace_Level_One", SceneLoadMode.Additive);
+			SceneManager.Instance ().LoadScene (SceneLookupEnum.Workspace_Level_One, SceneLoadMode.Additive);
 			//SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
 
 

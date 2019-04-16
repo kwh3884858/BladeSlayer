@@ -19,7 +19,7 @@ namespace Skylight
 			ScriptableObject.CreateInstance<CreateAssetAction> (),
 			 "Assets/Scripts/UI/Panel/" + selectName + ".cs",
 			EditorGUIUtility.IconContent ("cs Script Icon").image as Texture2D,
-			"Assets/Skylight/Editor/Template/85-CS-NewUIPanelScript.cs.txt");
+			"Assets/Skylight/Editor/Template/NewUIPanelScript.cs.txt");
 		}
 		[MenuItem ("Assets/Framework/CreateUIPanelScript %m", true)]
 		static bool ValidateSelectedPrefab ()

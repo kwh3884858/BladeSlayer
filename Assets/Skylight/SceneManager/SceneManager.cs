@@ -37,7 +37,10 @@ namespace Skylight
 			base.SingletonInit ();
 			EventManager.Instance ().AddEventListener<SceneLoadedEvent> (SceneLoadedCallBack);
 		}
-
+		public void LoadScene (SceneLookupEnum sceneName, SceneLoadMode loadMode, object sceneData = null)
+		{
+			LoadScene (SceneLookup.Get (sceneName), loadMode, sceneData);
+		}
 		public void LoadScene (string sceneName, SceneLoadMode loadMode, object sceneData = null)
 		{
 			//string sceneName = typeof (T).ToString ();

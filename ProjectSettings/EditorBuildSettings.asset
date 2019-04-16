@@ -9,12 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/GameRoot.unity
     guid: 794a34ea57d4e4d53aede9209dd11008
   - enabled: 1
-    path: Assets/Scenes/Scene1.unity
-    guid: 1ab842b2ed76845cc96dfa0d3f99f57f
-  - enabled: 1
-    path: Assets/Scenes/Scene2.unity
-    guid: 1636e992abdff4af18a9a354f3b6e5bf
-  - enabled: 1
     path: Assets/Scenes/Workspace_Level_One.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
