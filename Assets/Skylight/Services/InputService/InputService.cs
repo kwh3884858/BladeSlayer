@@ -91,7 +91,9 @@ namespace Skylight
 			switch (e.m_buttonName) {
 			case "A":
 			case "a":
-				SetInput (KeyMap.A, false);
+			case "d":
+			case "D":
+				SetAxis (KeyMap.Horizontal, 0f);
 				break;
 
 			}
@@ -104,10 +106,16 @@ namespace Skylight
 			switch (e.m_buttonName) {
 			case "A":
 			case "a":
-				SetInput (KeyMap.A, true);
+				AddAxis (KeyMap.Horizontal, -1f);
 
 				break;
 
+
+			case "d":
+			case "D":
+				AddAxis (KeyMap.Horizontal, 1f);
+
+				break;
 			}
 		}
 
@@ -127,6 +135,11 @@ namespace Skylight
 			return (m_inputs [map] as ButtonInput).Value;
 		}
 
+		public void AddAxis (KeyMap map, float value)
+		{
+			(m_inputs [map] as AxisInput).Value += value;
+			Mathf.Clamp ((m_inputs [map] as AxisInput).Value, -1.0f, 1.0f);
+		}
 		public void SetAxis (KeyMap map, float value)
 		{
 			(m_inputs [map] as AxisInput).Value = value;

@@ -28,4 +28,19 @@ public class SkylightConsole : UIPanel
 	{
 		base.PanelClose ();
 	}
+
+	private void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.Tab)) {
+			if (m_isOpen == false) {
+				transform.Find ("Panel").gameObject.SetActive (true);
+
+				m_isOpen = true;
+			} else {
+				transform.Find ("Panel").gameObject.SetActive (false);
+
+				m_isOpen = false;
+			}
+		}
+	}
 }

@@ -202,6 +202,28 @@ namespace Skylight
 		{
 #if UNITY_EDITOR
 			//string levelName = "scenes/scene1.unity3d";
+
+			//if (abm != null) {
+			//	abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnAssetBundleDownloaded);
+			//} else {
+			//	Debug.LogError ("Error initializing ABM.");
+			//}
+			//UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+			////old style
+			string strName = "Assets/scenes/" + sceneName + ".unity";
+			StartCoroutine (LoadYourAsyncScene (sceneName));
+
+			//AssetDatabase.LoadAssetAtPath<SceneAsset> (strName);
+			//UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+			//new style: load from scenemanger
+			//AsyncOperation asyncLoad = new AsyncOperation ();
+
+			//StartCoroutine (InitializeLevelAsync (sceneName, mode));
+
+
+#else
 			if (abm != null) {
 				abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnAssetBundleDownloaded);
 			} else {
@@ -209,18 +231,6 @@ namespace Skylight
 			}
 			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
-			////old style
-			//string strName = "Assets/" + path + ".unity";
-			//T go = AssetDatabase.LoadAssetAtPath<T> (strName);
-
-			//new style: load from scenemanger
-
-			//AsyncOperation asyncLoad = new AsyncOperation ();
-
-			//StartCoroutine (InitializeLevelAsync (sceneName, mode));
-
-
-#else
 			//StartCoroutine (InitializeLevelAsync (sceneName, mode));
 			//Console.Instance ().Debug (path);
 			//path = path.ToLower ();
@@ -236,10 +246,16 @@ namespace Skylight
 				// Do something with the bundle
 				abm.UnloadBundle (bundle);
 			}
+			string sceneName = bundleName.Substring (
+				bundleName.IndexOf ('/') + 1,
+				bundleName.LastIndexOf ('.') - bundleName.IndexOf ('/') - 1
+				);
+			Console.Instance ().Debug (sceneName);
 
 			abm.Dispose ();
-
-			EventManager.Instance ().SendEvent<SceneLoadedEvent> (new SceneLoadedEvent ());
+			//Console.Instance().
+			//TODO:Test whether bundle name is scene name? 
+			EventManager.Instance ().SendEvent<SceneLoadedEvent> (new SceneLoadedEvent (sceneName));
 		}
 
 		IEnumerator InitializeLevelAsync (string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode)
@@ -310,6 +326,25 @@ namespace Skylight
 			//if (scene.name == sceneName) {
 			//	m_currentScene = scene;
 			//}
+
+		}
+
+		IEnumerator LoadYourAsyncScene (string sceneName)
+		{
+			// The Application loads the Scene in the background as the current Scene runs.
+			// This is particularly good for creating loading screens.
+			// You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
+			// a sceneBuildIndex of 1 as shown in Build Settings.
+
+			AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+
+			// Wait until the asynchronous scene fully loads
+			while (!asyncLoad.isDone) {
+				yield return null;
+			}
+
+			EventManager.Instance ().SendEvent<SceneLoadedEvent> (new SceneLoadedEvent (sceneName));
 
 		}
 		public static GameObject LoadMaterialPrefabs (string path)

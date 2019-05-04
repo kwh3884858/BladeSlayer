@@ -20,9 +20,13 @@ namespace Skylight
 		}
 	}
 
-	public class SceneLoadedEvent : EventArgs
+	public class SceneLoadedEvent : SceneEvent
 	{
+		public SceneLoadedEvent (string sceneName) :
+		 base (sceneName)
+		{
 
+		}
 	}
 
 	public class SceneEnterEvent : SceneEvent

@@ -53,7 +53,7 @@ namespace Skylight
 			}
 
 			//Generate scene lookup
-			SceneLookupGenerator.CreateSceneLookup (sceneName);
+			//SceneLookupGenerator.CreateSceneLookup (sceneName);
 
 			// Set the Build Settings window Scene list
 			EditorBuildSettings.scenes = editorBuildSettingsScenes.ToArray ();

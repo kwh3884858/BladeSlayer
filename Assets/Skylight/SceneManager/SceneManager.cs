@@ -25,7 +25,7 @@ namespace Skylight
 
 		List<string> m_loadedScene = new List<string> ();
 
-		public delegate void callback ();
+		public delegate void callback (SceneLoadedEvent e);
 		List<callback> m_loadedSceneEvent = new List<callback> ();
 
 		public UnityEngine.SceneManagement.Scene m_currentScene {
@@ -153,7 +153,7 @@ namespace Skylight
 		{
 			if (m_loadedSceneEvent != null) {
 				foreach (callback call in m_loadedSceneEvent) {
-					call?.Invoke ();
+					call?.Invoke (showSceneEvent);
 				}
 
 				m_loadedSceneEvent.Clear ();

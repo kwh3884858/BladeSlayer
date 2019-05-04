@@ -25,10 +25,10 @@ namespace Skylight
 
 		public void Debug (string text)
 		{
-			if (i < limit) {
-				i++;
-				return;
-			}
+			//if (i < limit) {
+			//	i++;
+			//	return;
+			//}
 			m_skylightConsole.Show (text + "\n");
 		}
 	}

@@ -43,17 +43,16 @@ namespace Skylight
 			//UIManager.Instance ().ShowPanel<UIMainMenu> ();
 			//UIManager.Instance().ShowPanel<UIMainMenuPanel>();
 
-			AddEntitas ();
+			//AddEntitas ();
 
-			//SceneManager.Instance ().AddSceneLoadedEvent (Handlecallback);
-
+			SceneManager.Instance ().AddSceneLoadedEvent (Handlecallback);
 
 			StartCoroutine (AfterInitialize ());
 		}
 		IEnumerator AfterInitialize ()
 		{
 			yield return null;
-			SceneManager.Instance ().LoadScene (SceneLookupEnum.Workspace_Level_One, SceneLoadMode.Additive);
+			SceneManager.Instance ().LoadScene (SceneLookupEnum.PrototypeA, SceneLoadMode.Additive);
 			//SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
 
 
@@ -68,10 +67,16 @@ namespace Skylight
 			//}
 		}
 
-		void Handlecallback ()
+		void Handlecallback (SceneLoadedEvent loadedEvent)
 		{
-			virtualMachineInterface = new VirtualMachineInterface ();
-			virtualMachineInterface.Start ();
+
+			if (loadedEvent.GetSceneName () == SceneLookupEnum.PrototypeA.ToString ().ToLower ()) {
+				UIManager.Instance ().ShowPanel<UIButtonDirection> ();
+
+			}
+
+			//virtualMachineInterface = new VirtualMachineInterface ();
+			//virtualMachineInterface.Start ();
 			//SceneManager.Instance ().RemoveSceneLoadedEvent (Handlecallback);
 		}
 
