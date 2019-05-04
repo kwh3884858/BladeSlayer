@@ -17,8 +17,12 @@ namespace Skylight
 	{
 		A = KeyCode.A,
 		D = KeyCode.D,
+		J = KeyCode.J,
+		K = KeyCode.K,
 		Horizontal,
-		Vertical
+		Vertical,
+		LightAttack = KeyCode.J,
+		HeavyAttack = KeyCode.K,
 
 	}
 
@@ -96,6 +100,15 @@ namespace Skylight
 				SetAxis (KeyMap.Horizontal, 0f);
 				break;
 
+			case "J":
+			case "j":
+				SetInput (KeyMap.LightAttack, false);
+				break;
+
+			case "K":
+			case "k":
+				SetInput (KeyMap.HeavyAttack, false);
+				break;
 			}
 		}
 
@@ -115,6 +128,16 @@ namespace Skylight
 			case "D":
 				AddAxis (KeyMap.Horizontal, 1f);
 
+				break;
+
+			case "J":
+			case "j":
+				SetInput (KeyMap.LightAttack, true);
+				break;
+
+			case "K":
+			case "k":
+				SetInput (KeyMap.HeavyAttack, true);
 				break;
 			}
 		}
@@ -245,6 +268,9 @@ namespace Skylight
 			//m_inputs.Add (KeyMap.D, new ButtonInput (KeyCode.D.ToString ()));
 			m_inputs.Add (KeyMap.Horizontal, new AxisInput (KeyMap.Horizontal.ToString ()));
 			m_inputs.Add (KeyMap.Vertical, new AxisInput (KeyMap.Vertical.ToString ()));
+			m_inputs.Add (KeyMap.LightAttack, new ButtonInput (KeyCode.J.ToString ()));
+			m_inputs.Add (KeyMap.HeavyAttack, new ButtonInput (KeyCode.K.ToString ()));
+
 
 			EventManager.Instance ().AddEventListener<ButtonDownEvent> (HandleButtonDownEvent);
 			EventManager.Instance ().AddEventListener<ButtonUpEvent> (HandleButtonUpEvent);

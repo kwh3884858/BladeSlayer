@@ -24,6 +24,16 @@ namespace Skylight
 			//AddGameObject<Localization> ();
 			//Initialize asset bundle loader and assetmanager
 			AddGameObject<AssetsManager> ();
+
+			StartCoroutine (AfterInitialize ());
+		}
+
+		IEnumerator AfterInitialize ()
+		{
+			//After Assetmanager is loaded, loading other modole
+			while (!AssetsManager.Instance ().IsAssetBundleManagerLoaded) {
+				yield return null;
+			}
 			AddGameObject<SceneManager> ();
 			AddGameObject<SoundService> ();
 
@@ -47,11 +57,7 @@ namespace Skylight
 
 			SceneManager.Instance ().AddSceneLoadedEvent (Handlecallback);
 
-			StartCoroutine (AfterInitialize ());
-		}
-		IEnumerator AfterInitialize ()
-		{
-			yield return null;
+			//yield return null;
 			SceneManager.Instance ().LoadScene (SceneLookupEnum.PrototypeA, SceneLoadMode.Additive);
 			//SceneManager.Instance ().LoadScene ("scene2", SceneLoadMode.Additive);
 
@@ -71,8 +77,8 @@ namespace Skylight
 		{
 
 			if (loadedEvent.GetSceneName () == SceneLookupEnum.PrototypeA.ToString ().ToLower ()) {
-				UIManager.Instance ().ShowPanel<UIButtonDirection> ();
-
+				UIManager.Instance ().ShowPanel<UIDirectionButtonPanel> ();
+				UIManager.Instance ().ShowPanel<UIControllerPanel> ();
 			}
 
 			//virtualMachineInterface = new VirtualMachineInterface ();

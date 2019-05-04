@@ -21,6 +21,8 @@ namespace Skylight
 		private UIDialog m_currentDialog = null;
 		private UIBox m_currentBox = null;
 
+		public delegate void Callback ();
+
 		public override void SingletonInit ()
 		{
 			transform.SetParent (GameRoot.Instance ().transform);
@@ -46,7 +48,7 @@ namespace Skylight
 			if (!dialogTran) {
 				string perfbName = "UI/Dialog/" + typeof (T).ToString ();
 				Debug.Log (perfbName);
-				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
+				GameObject perfb = null;
 				if (perfb == null) {
 					Debug.Log ("UIDialog Can`t Find Perfab");
 				}
@@ -124,7 +126,7 @@ namespace Skylight
 			T panel = null;
 			if (panelTran == null) {
 				string perfbName = "UI/Overlay/" + typeof (T).ToString ();
-				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
+				GameObject perfb = null;
 				if (perfb == null) {
 					Debug.Log ("UIOverlay Can`t Find Perfab");
 				}
@@ -193,36 +195,66 @@ namespace Skylight
 		/// <param name="isFramework">这个UI是否为框架使用的。设为<c>true</c>是用于框架级的UI预设。通常都是false。</param>
 		/// <param name="varList">Variable list.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T ShowPanel<T> (bool isFramework = false, Dictionary<string, object> varList = null) where T : UIPanel
+		public void ShowPanel<T> (bool isFramework = false,
+			Callback callback = null,
+		 Dictionary<string, object> varList = null) where T : UIPanel
 		{
-			string name = typeof (T).ToString ();
+			string panelName = typeof (T).ToString ();
 			//Debug.Log (name);
-			Transform panelTran = m_panel.transform.Find (name);
+			Transform panelTran = m_panel.transform.Find (panelName);
 			GameObject uiObject;
 			T panel = null;
 			if (panelTran == null) {
 				string perfbName;
 				if (!isFramework) {
-					perfbName = "UI/Panel/" + typeof (T).ToString ();
+					perfbName = string.Format ("UI/Panel/{0}.unity3d", typeof (T));
 				} else {
-					perfbName = "Skylight/UI/Panel/" + typeof (T).ToString ();
+					perfbName = string.Format ("Skylight/UI/Panel/{0}.unity3d", typeof (T));
 				}
-				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
-				if (perfb == null) {
-					Debug.Log ("UIPanel Can`t Find Perfab");
-				}
-				uiObject = GameObject.Instantiate (perfb);
-				uiObject.name = name;
-				T t = uiObject.AddComponent<T> ();
-				uiObject.transform.SetParent (m_panel.transform);
+				AssetsManager.Instance ().LoadPrefab (perfbName, (AssetBundle obj) => {
+					GameObject perfb;
+					perfb = obj.LoadAsset<GameObject> (panelName);
+					//perfb = obj.mainAsset as GameObject;
+					if (perfb == null) {
+						Debug.Log ("UIPanel Can`t Find Perfab");
+						return;
+					}
+					uiObject = GameObject.Instantiate (perfb);
+					uiObject.name = panelName;
+					T t = uiObject.AddComponent<T> ();
+					uiObject.transform.SetParent (m_panel.transform);
 
-				t.PanelInit ();
+					t.PanelInit ();
+
+					OpenUIPanel<T> (uiObject);
+					if (callback != null) {
+						callback ();
+
+					}
+				});
+				//if (perfb == null) {
+				//	Debug.Log ("UIPanel Can`t Find Perfab");
+				//}
+				//uiObject = GameObject.Instantiate (perfb);
+				//uiObject.name = name;
+				//T t = uiObject.AddComponent<T> ();
+				//uiObject.transform.SetParent (m_panel.transform);
+
+				//t.PanelInit ();
 
 			} else {
 				uiObject = panelTran.gameObject;
+				OpenUIPanel<T> (uiObject);
+				callback ();
 			}
+
+			return;
+		}
+
+		void OpenUIPanel<T> (GameObject uiObject, Dictionary<string, object> varList = null) where T : UIPanel
+		{
 			if (uiObject) {
-				panel = uiObject.GetComponent<T> ();
+				T panel = uiObject.GetComponent<T> ();
 				panel.PanelOpen ();
 				if (varList != null)
 					panel.m_userData = varList;
@@ -230,8 +262,8 @@ namespace Skylight
 				uiObject.SetActive (true);
 			}
 
-			return panel;
 		}
+
 
 		public void ClosePanel<T> () where T : UIPanel
 		{
@@ -274,15 +306,49 @@ namespace Skylight
 			GameObject uiObject;
 			if (panelTran == null) {
 				string perfbName = "UI/Box/" + typeof (T).ToString ();
-				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
-				uiObject = GameObject.Instantiate (perfb);
-				uiObject.name = name;
-				T t = uiObject.AddComponent<T> ();
-				uiObject.transform.SetParent (m_box.transform);
-				t.PanelInit ();
+
+				//GameObject perfb = AssetsManager.LoadPrefab<GameObject> (perfbName);
+				AssetsManager.Instance ().LoadPrefab (perfbName, (AssetBundle obj) => {
+					GameObject perfb;
+					if (obj == null) {
+						Debug.Log ("UIPanel Can`t Find Perfab");
+					}
+					perfb = obj.mainAsset as GameObject;
+
+					uiObject = GameObject.Instantiate (perfb);
+					uiObject.name = obj.name.Substring (0, obj.name.IndexOf ('.'));
+					T t = uiObject.AddComponent<T> ();
+					uiObject.transform.SetParent (m_box.transform);
+
+					t.PanelInit ();
+
+					OpenUIBoxOpen<T> (uiObject);
+				});
+				//uiObject = GameObject.Instantiate (perfb);
+				//uiObject.name = name;
+				//T t = uiObject.AddComponent<T> ();
+				//uiObject.transform.SetParent (m_box.transform);
+				//t.PanelInit ();
 			} else {
 				uiObject = panelTran.gameObject;
+				OpenUIBoxOpen<T> (uiObject);
 			}
+			//if (uiObject) {
+			//	T box = uiObject.GetComponent<T> ();
+			//	box.PanelOpen ();
+			//	if (varList != null)
+			//		box.m_userData = varList;
+
+			//	if (m_currentBox)
+			//		m_currentBox.gameObject.SetActive (false);
+
+			//	uiObject.SetActive (true);
+			//	m_currentBox = box;
+			//}
+		}
+
+		private void OpenUIBoxOpen<T> (GameObject uiObject, Dictionary<string, object> varList = null) where T : UIBox
+		{
 			if (uiObject) {
 				T box = uiObject.GetComponent<T> ();
 				box.PanelOpen ();

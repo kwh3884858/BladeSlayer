@@ -14,7 +14,7 @@ namespace Skylight
 			if (m_allPrefab.ContainsKey (prefabName)) {
 				return m_allPrefab [prefabName];
 			} else {
-				GameObject perfb = AssetsManager.LoadPrefab<GameObject> (name);
+				GameObject perfb = null;
 				if (perfb == null) {
 					Debug.Log (prefabName + "can`t find in Prefabs/" + prefabName);
 					return null;

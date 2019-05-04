@@ -126,9 +126,9 @@ namespace Skylight
 			if (abDic.ContainsKey (abPath) == true)
 				return abDic [abPath];
 			if (manifest == null) {
+				string ane = AssetsManager.ASSETBUNDLE_PATH + AssetsUtility.GetPlatformName () + "/" + AssetsUtility.GetPlatformName ();
 				AssetBundle manifestBundle = AssetBundle.LoadFromFile (AssetsManager.ASSETBUNDLE_PATH +
-																		 AssetsManager.ASSETBUNDLE_FILENAME + "/" + AssetsUtility.GetPlatformName ());
-				Debug.Log (AssetsManager.ASSETBUNDLE_PATH + AssetsManager.ASSETBUNDLE_FILENAME);
+																		  AssetsUtility.GetPlatformName () + "/" + AssetsUtility.GetPlatformName ());
 				manifest = (AssetBundleManifest)manifestBundle.LoadAsset ("AssetBundleManifest");
 			}
 			if (manifest != null) {
@@ -142,7 +142,7 @@ namespace Skylight
 				}
 
 				// 4.加载资源
-				abDic [abPath] = AssetBundle.LoadFromFile (AssetsManager.ASSETBUNDLE_PATH + abPath);
+				abDic [abPath] = AssetBundle.LoadFromFile (AssetsManager.ASSETBUNDLE_PATH + AssetsUtility.GetPlatformName () + "/" + abPath);
 
 				return abDic [abPath];
 			}

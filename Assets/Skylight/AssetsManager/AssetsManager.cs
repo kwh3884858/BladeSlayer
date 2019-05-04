@@ -16,6 +16,14 @@ namespace Skylight
 
 		//AssetBundleLoad m_assetBundleLoader;
 		private AssetBundleManager abm;
+		bool m_isAssetBundleManagerLoaded = false;
+
+		public bool IsAssetBundleManagerLoaded {
+			get {
+				return m_isAssetBundleManagerLoaded;
+			}
+		}
+
 		//AssetBundle打包路径/assets/StreamingAssets
 		//public static string ASSETBUNDLE_PATH = Application.dataPath + "/StreamingAssets/AssetBundle/";
 
@@ -164,9 +172,10 @@ namespace Skylight
 
 		private void OnAssetBundleManagerInitialized (bool success)
 		{
-			if (success)
+			if (success) {
 				Debug.Log ("Assetbundle Manager loaded finish.");
-			else
+				m_isAssetBundleManagerLoaded = true;
+			} else
 				Debug.Log ("Assetbundle Manager loaded failed");
 			//Application.LoadLevelAdditiveAsync (levelName);
 		}
@@ -177,24 +186,36 @@ namespace Skylight
 		//	return AssetsUtility.GetPlatformName () + "/" + bundleName;
 		//}
 
-		public static T LoadPrefab<T> (string path) where T : UnityEngine.Object
+		public void LoadPrefab (string path, Action<AssetBundle> OnAssetBundleDownloaded)
 		{
 #if UNITY_EDITOR
 
+			if (abm != null) {
+				abm.GetBundle (path, OnAssetBundleDownloaded);
+			} else {
+				Debug.LogError ("Error initializing ABM.");
+			}
+			//string strName = "Assets/" + path + ".prefab";
+			//T go = AssetDatabase.LoadAssetAtPath<T> (strName);
 
-			string strName = "Assets/" + path + ".prefab";
-			T go = AssetDatabase.LoadAssetAtPath<T> (strName);
+			//return go;
 
-			return go;
+			//Console.Instance ().Debug (path);
+			//path = path.ToLower ();
+			//T go = AssetBundleLoad.LoadGameObject (path) as T;
+			//return go;
 #else
 
-			Console.Instance ().Debug (path);
-			path = path.ToLower ();
-			T go = AssetBundleLoad.LoadGameObject (path) as T;
-            return go;
+				//Console.Instance ().Debug (path);
+			if (abm != null) {
+				abm.GetBundle (path, OnAssetBundleDownloaded);
+			} else {
+				Debug.LogError ("Error initializing ABM.");
+			}
 #endif
 		}
-		//public delegate void SceneLoadFinish ();
+
+
 		public void LoadScene (
 			string sceneName,
 			UnityEngine.SceneManagement.LoadSceneMode mode
@@ -203,16 +224,16 @@ namespace Skylight
 #if UNITY_EDITOR
 			//string levelName = "scenes/scene1.unity3d";
 
-			//if (abm != null) {
-			//	abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnAssetBundleDownloaded);
-			//} else {
-			//	Debug.LogError ("Error initializing ABM.");
-			//}
-			//UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+			if (abm != null) {
+				abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnSceneAssetBundleDownloaded);
+			} else {
+				Debug.LogError ("Error initializing ABM.");
+			}
+			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
 			////old style
-			string strName = "Assets/scenes/" + sceneName + ".unity";
-			StartCoroutine (LoadYourAsyncScene (sceneName));
+			//string strName = "Assets/scenes/" + sceneName + ".unity";
+			//StartCoroutine (LoadYourAsyncScene (sceneName));
 
 			//AssetDatabase.LoadAssetAtPath<SceneAsset> (strName);
 			//UnityEngine.SceneManagement.SceneManager.LoadSceneAsync (sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
@@ -225,7 +246,7 @@ namespace Skylight
 
 #else
 			if (abm != null) {
-				abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnAssetBundleDownloaded);
+				abm.GetBundle (string.Format ("scenes/{0}.unity3d", sceneName), OnSceneAssetBundleDownloaded);
 			} else {
 				Debug.LogError ("Error initializing ABM.");
 			}
@@ -238,7 +259,7 @@ namespace Skylight
             //return go;
 #endif
 		}
-		private void OnAssetBundleDownloaded (AssetBundle bundle)
+		private void OnSceneAssetBundleDownloaded (AssetBundle bundle)
 		{
 			string bundleName;
 			bundleName = bundle.name;

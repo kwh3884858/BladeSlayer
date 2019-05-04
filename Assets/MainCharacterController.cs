@@ -10,6 +10,15 @@ public class MainCharacterController : MonoBehaviour
 	private bool m_isFaceRight = false;
 
 	Animator m_animator;
+
+	bool m_isAttack;
+
+	public void FinishAttckAnimation ()
+	{
+		m_animator.SetBool ("IsLightAttack", false);
+		m_isAttack = false;
+	}
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -19,11 +28,25 @@ public class MainCharacterController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if (m_isAttack == true) return;
 
+		if (InputService.Instance ().GetInput (KeyMap.LightAttack)) {
+			Debug.Log ("Light attack!");
+			m_animator.SetBool ("IsLightAttack", true);
+			m_isAttack = true;
+		}
+
+		if (InputService.Instance ().GetInput (KeyMap.HeavyAttack)) {
+			Debug.Log ("Heavy attack!");
+			m_isAttack = true;
+
+		}
 	}
 
 	void FixedUpdate ()
 	{
+		if (m_isAttack) return;
+
 		float horizontalAxis = InputService.Instance ().GetAxis (KeyMap.Horizontal);
 		if (horizontalAxis > 0.1f || horizontalAxis < -0.1f) {
 			Debug.Log (InputService.Instance ().GetAxis (KeyMap.Horizontal));
@@ -34,6 +57,7 @@ public class MainCharacterController : MonoBehaviour
 
 
 		}
+
 		m_animator.SetFloat ("HorizontalVelocity", Mathf.Abs (horizontalAxis));
 
 		if (horizontalAxis < -0.1f) {

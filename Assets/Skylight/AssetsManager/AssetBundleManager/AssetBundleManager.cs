@@ -89,7 +89,8 @@ namespace Skylight
 		/// </summary>
 		public AssetBundleManager UseSimulatedUri ()
 		{
-			SetBaseUri (new [] { string.Format ("file://{0}/StreamingAssets/AssetBundle/", Application.dataPath) });
+			SetBaseUri (new [] { string.Format ("file://{0}/AssetBundle/", Application.streamingAssetsPath) });
+
 			//SetBaseUri (new [] { string.Format ("file://{0}/AssetBundle/", Application.dataPath) });
 
 			return this;
@@ -351,67 +352,67 @@ namespace Skylight
 		}
 
 #if NET_4_6
-        /// <summary>
-        ///     Downloads the AssetBundle manifest and prepares the system for bundle management.
-        /// </summary>
-        public async Task<bool> Initialize()
-        {
-            var completionSource = new TaskCompletionSource<bool>();
-            var onComplete = new Action<bool>(b => completionSource.SetResult(b));
-            Initialize(onComplete);
-            return await completionSource.Task;
-        }
+		/// <summary>
+		///     Downloads the AssetBundle manifest and prepares the system for bundle management.
+		/// </summary>
+		public async Task<bool> Initialize ()
+		{
+			var completionSource = new TaskCompletionSource<bool> ();
+			var onComplete = new Action<bool> (b => completionSource.SetResult (b));
+			Initialize (onComplete);
+			return await completionSource.Task;
+		}
 
-        /// <summary>
-        ///     Downloads an AssetBundle or returns a cached AssetBundle if it has already been downloaded.
-        ///     Remember to call <see cref="UnloadBundle(UnityEngine.AssetBundle,bool)" /> for every bundle you download once you
-        ///     are done with it.
-        /// </summary>
-        /// <param name="bundleName">Name of the bundle to download.</param>
-        public async Task<AssetBundle> GetBundle(string bundleName)
-        {
-            var completionSource = new TaskCompletionSource<AssetBundle>();
-            var onComplete = new Action<AssetBundle>(bundle => completionSource.SetResult(bundle));
-            GetBundle(bundleName, onComplete);
-            return await completionSource.Task;
-        }
+		/// <summary>
+		///     Downloads an AssetBundle or returns a cached AssetBundle if it has already been downloaded.
+		///     Remember to call <see cref="UnloadBundle(UnityEngine.AssetBundle,bool)" /> for every bundle you download once you
+		///     are done with it.
+		/// </summary>
+		/// <param name="bundleName">Name of the bundle to download.</param>
+		public async Task<AssetBundle> GetBundle (string bundleName)
+		{
+			var completionSource = new TaskCompletionSource<AssetBundle> ();
+			var onComplete = new Action<AssetBundle> (bundle => completionSource.SetResult (bundle));
+			GetBundle (bundleName, onComplete);
+			return await completionSource.Task;
+		}
 
-        /// <summary>
-        ///     Downloads an AssetBundle or returns a cached AssetBundle if it has already been downloaded.
-        ///     Remember to call <see cref="UnloadBundle(UnityEngine.AssetBundle,bool)" /> for every bundle you download once you
-        ///     are done with it.
-        /// </summary>
-        /// <param name="bundleName">Name of the bundle to download.</param>
-        /// <param name="downloadSettings">
-        ///     Tell the function to use a previously downloaded version of the bundle if available.
-        ///     Important!  If the bundle is currently "active" (it has not been unloaded) then the active bundle will be used
-        ///     regardless of this setting.  If it's important that a new version is downloaded then be sure it isn't active.
-        /// </param>
-        public async Task<AssetBundle> GetBundle(string bundleName, DownloadSettings downloadSettings)
-        {
-            var completionSource = new TaskCompletionSource<AssetBundle>();
-            var onComplete = new Action<AssetBundle>(bundle => completionSource.SetResult(bundle));
-            GetBundle(bundleName, onComplete, downloadSettings);
-            return await completionSource.Task;
-        }
+		/// <summary>
+		///     Downloads an AssetBundle or returns a cached AssetBundle if it has already been downloaded.
+		///     Remember to call <see cref="UnloadBundle(UnityEngine.AssetBundle,bool)" /> for every bundle you download once you
+		///     are done with it.
+		/// </summary>
+		/// <param name="bundleName">Name of the bundle to download.</param>
+		/// <param name="downloadSettings">
+		///     Tell the function to use a previously downloaded version of the bundle if available.
+		///     Important!  If the bundle is currently "active" (it has not been unloaded) then the active bundle will be used
+		///     regardless of this setting.  If it's important that a new version is downloaded then be sure it isn't active.
+		/// </param>
+		public async Task<AssetBundle> GetBundle (string bundleName, DownloadSettings downloadSettings)
+		{
+			var completionSource = new TaskCompletionSource<AssetBundle> ();
+			var onComplete = new Action<AssetBundle> (bundle => completionSource.SetResult (bundle));
+			GetBundle (bundleName, onComplete, downloadSettings);
+			return await completionSource.Task;
+		}
 
-        /// <summary>
-        ///     Downloads a bundle (or uses a cached bundle) and loads a Unity scene contained in an asset bundle asynchronously.
-        /// </summary>
-        /// <param name="bundleName">Name of the bundle to donwnload.</param>
-        /// <param name="levelName">Name of the unity scene to load.</param>
-        /// <param name="loadSceneMode">See <see cref="LoadSceneMode">UnityEngine.SceneManagement.LoadSceneMode</see>.</param>
-        /// <returns></returns>
-        public async Task<AsyncOperation> LoadLevelAsync(string bundleName, string levelName, LoadSceneMode loadSceneMode)
-        {
-            try {
-                await GetBundle(bundleName);
-                return SceneManager.LoadSceneAsync(levelName, loadSceneMode);
-            } catch {
-                Debug.LogError($"Error while loading the scene {levelName} from {bundleName}");
-                throw;
-            }
-        }
+		/// <summary>
+		///     Downloads a bundle (or uses a cached bundle) and loads a Unity scene contained in an asset bundle asynchronously.
+		/// </summary>
+		/// <param name="bundleName">Name of the bundle to donwnload.</param>
+		/// <param name="levelName">Name of the unity scene to load.</param>
+		/// <param name="loadSceneMode">See <see cref="LoadSceneMode">UnityEngine.SceneManagement.LoadSceneMode</see>.</param>
+		/// <returns></returns>
+		public async Task<AsyncOperation> LoadLevelAsync (string bundleName, string levelName, LoadSceneMode loadSceneMode)
+		{
+			try {
+				await GetBundle (bundleName);
+				return SceneManager.LoadSceneAsync (levelName, loadSceneMode);
+			} catch {
+				Debug.LogError ($"Error while loading the scene {levelName} from {bundleName}");
+				throw;
+			}
+		}
 #endif
 
 		/// <summary>

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114464995514743646}
   - component: {fileID: 114540095284095138}
   m_Layer: 5
-  m_Name: UIButtonDirection
+  m_Name: UIDirectionButtonPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

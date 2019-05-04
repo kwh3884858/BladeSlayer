@@ -4,7 +4,7 @@ using UnityEngine;
 using Skylight;
 using UnityEngine.EventSystems;
 
-public class UIButtonDirection : UIPanel
+public class UIDirectionButtonPanel : UIPanel
 {
 
 	Transform m_leftButton;

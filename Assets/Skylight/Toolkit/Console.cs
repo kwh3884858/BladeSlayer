@@ -9,13 +9,14 @@ namespace Skylight
 	{
 		//GameObject
 		SkylightConsole m_skylightConsole;
-		int limit = 1;
-		int i = 0;
 
 		public override void SingletonInit ()
 		{
 			base.SingletonInit ();
-			m_skylightConsole = UIManager.Instance ().ShowPanel<SkylightConsole> (true);
+			UIManager.Instance ().ShowPanel<SkylightConsole> (true, () => {
+				m_skylightConsole = UIManager.Instance ().GetPanel<SkylightConsole> ();
+
+			});
 			//m_skylightConsole.Show ("11");
 		}
 		public void Debug (GameObject go)
